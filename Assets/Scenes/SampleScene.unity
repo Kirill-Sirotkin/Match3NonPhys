@@ -785,6 +785,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 676920336}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &678683514
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 678683515}
+  m_Layer: 0
+  m_Name: PIECES PARENT
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &678683515
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 678683514}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -1023,7 +1054,7 @@ Transform:
   - {fileID: 25124134}
   - {fileID: 2030425397}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &929801657
 MonoBehaviour:
@@ -1037,6 +1068,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d325adb87e431545a3ae9c90c1f3773, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _type: 3
   _highlight: {fileID: 2030425396}
   _visual: {fileID: 25124133}
 --- !u!1 &933169181
@@ -1673,6 +1705,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1296040057}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1297419360
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1297419361}
+  m_Layer: 0
+  m_Name: GAME MANAGER
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1297419361
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1297419360}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1307152033
 GameObject:
   m_ObjectHideFlags: 0
@@ -1841,7 +1904,7 @@ Transform:
   - {fileID: 1292804963}
   - {fileID: 627024495}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1326565156
 MonoBehaviour:
@@ -1855,6 +1918,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d325adb87e431545a3ae9c90c1f3773, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _type: 1
   _highlight: {fileID: 627024494}
   _visual: {fileID: 1292804962}
 --- !u!1 &1427505879
@@ -2222,7 +2286,7 @@ Transform:
   - {fileID: 2146252448}
   - {fileID: 1917317364}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1783311058
 BoxCollider:
@@ -2249,6 +2313,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d325adb87e431545a3ae9c90c1f3773, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _type: 0
   _highlight: {fileID: 1917317363}
   _visual: {fileID: 2146252447}
 --- !u!1 &1808993961
@@ -2297,7 +2362,7 @@ Transform:
   - {fileID: 205047800}
   - {fileID: 718498582}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1808993964
 MonoBehaviour:
@@ -2311,6 +2376,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d325adb87e431545a3ae9c90c1f3773, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _type: 2
   _highlight: {fileID: 718498581}
   _visual: {fileID: 205047799}
 --- !u!1 &1815143951
@@ -2667,7 +2733,7 @@ Transform:
   - {fileID: 1316311992}
   - {fileID: 973550067}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1969018433
 MonoBehaviour:
@@ -2681,6 +2747,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d325adb87e431545a3ae9c90c1f3773, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _type: 4
   _highlight: {fileID: 973550066}
   _visual: {fileID: 1316311991}
 --- !u!1 &2002070093

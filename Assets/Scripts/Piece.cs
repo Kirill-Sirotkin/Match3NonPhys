@@ -7,6 +7,7 @@ namespace Match3NonPhys
 {
     public class Piece : MonoBehaviour, IClickable
     {
+        [field: SerializeField] private PieceType _type;
         [field: SerializeField] private GameObject _highlight;
         [field: SerializeField] private GameObject _visual;
 
@@ -15,7 +16,8 @@ namespace Match3NonPhys
             if (Input.GetKeyDown(KeyCode.A))
             {
                 //Move(new Vector3(transform.position.x, transform.position.y - 3f, 0f));
-                Spin();
+                //Spin();
+                Despawn();
             }
             if (Input.GetKeyDown(KeyCode.S))
             {
@@ -31,6 +33,15 @@ namespace Match3NonPhys
         {
             _visual.transform.DORotate(new Vector3(0f, 360f, 0f), 0.25f, RotateMode.FastBeyond360);
         }
+        public void Despawn()
+        {
+            _visual.transform.DOScale(Vector3.zero, 0.15f).SetEase(Ease.InBack).OnComplete(()=> 
+            {
+                transform.DOKill();
+                Destroy(gameObject);
+            });
+
+        }
         public void ToggleHighlight(bool b)
         {
             _highlight.SetActive(b);
@@ -43,5 +54,14 @@ namespace Match3NonPhys
         {
             ToggleHighlight();
         }
+    }
+
+    public enum PieceType
+    {
+        Red,
+        Blue,
+        Yellow,
+        Green,
+        Purple
     }
 }

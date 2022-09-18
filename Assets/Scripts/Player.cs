@@ -28,7 +28,9 @@ namespace Match3NonPhys
             if (clickable == null) { return; }
             clickable.ClickAction();
 
-            
+            Piece piece = hit.transform.GetComponent<Piece>();
+
+            if (piece == null) { return; }
         }
     }
 
