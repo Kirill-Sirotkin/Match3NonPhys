@@ -9,11 +9,25 @@ namespace Match3NonPhys
     {
         private Piece _selectedPiece;
 
+        private List<Piece> _pieces = new List<Piece>();
+        private bool done = false;
+
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
                 MouseRay();
+            }
+            if(_pieces.Count >= 3)
+            {
+                if (!done)
+                {
+                    done = true;
+                    foreach (Piece p in _pieces)
+                    {
+                        p.Spin();
+                    }
+                }
             }
         }
 
@@ -31,6 +45,7 @@ namespace Match3NonPhys
             Piece piece = hit.transform.GetComponent<Piece>();
 
             if (piece == null) { return; }
+            _pieces.Add(piece);
         }
     }
 
