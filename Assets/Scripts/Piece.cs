@@ -32,7 +32,7 @@ namespace Match3NonPhys
             {
                 if (_currentTween.IsPlaying()) { return; }
             }
-            _currentTween = transform.DOMove(pos, Random.Range(0.72f, 0.77f)).SetEase(Ease.OutBack);
+            _currentTween = transform.DOMove(pos, 0.5f).SetEase(Ease.OutBack);
         }
         public void Spin()
         {

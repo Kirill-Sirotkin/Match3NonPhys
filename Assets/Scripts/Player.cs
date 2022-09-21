@@ -45,7 +45,29 @@ namespace Match3NonPhys
             Piece piece = hit.transform.GetComponent<Piece>();
 
             if (piece == null) { return; }
-            _pieces.Add(piece);
+            if (_selectedPiece == null) { _selectedPiece = piece; return; }
+            //_pieces.Add(piece);
+            SwapPieces(piece);
+        }
+        private void SwapPieces(Piece p)
+        {
+            if (Vector3.Distance(p.transform.position, _selectedPiece.transform.position) > 1.1f)
+            {
+                p.ToggleHighlight(false);
+
+                _selectedPiece.ToggleHighlight(false);
+                _selectedPiece = null;
+                return;
+            }
+
+            Vector3 pos = p.transform.position;
+
+            p.ToggleHighlight(false);
+            p.Move(_selectedPiece.transform.position);
+
+            _selectedPiece.Move(pos);
+            _selectedPiece.ToggleHighlight(false);
+            _selectedPiece = null;
         }
     }
 

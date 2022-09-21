@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace Match3NonPhys
 {
-    interface IClickable
+    public class GameManager : MonoBehaviour
     {
-        void ClickAction() { Debug.Log("Click"); }
+
     }
 }
