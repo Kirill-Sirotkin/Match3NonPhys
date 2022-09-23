@@ -7,6 +7,7 @@ namespace Match3NonPhys
 {
     public class Player : MonoBehaviour
     {
+        [field: SerializeField] private GameManager _manager;
         private Piece _selectedPiece;
 
         private List<Piece> _pieces = new List<Piece>();
@@ -37,17 +38,7 @@ namespace Match3NonPhys
             RaycastHit hit;
 
             if (!Physics.Raycast(ray, out hit, 100)) { return; }
-            IClickable clickable = hit.transform.GetComponent<IClickable>();
-
-            if (clickable == null) { return; }
-            clickable.ClickAction();
-
-            Piece piece = hit.transform.GetComponent<Piece>();
-
-            if (piece == null) { return; }
-            if (_selectedPiece == null) { _selectedPiece = piece; return; }
-            //_pieces.Add(piece);
-            SwapPieces(piece);
+            _manager.PassSelection(hit);
         }
         private void SwapPieces(Piece p)
         {

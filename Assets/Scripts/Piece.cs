@@ -11,39 +11,31 @@ namespace Match3NonPhys
         [field: SerializeField] private GameObject _highlight;
         [field: SerializeField] private GameObject _visual;
 
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.A))
-            {
-                //Move(transform.position + new Vector3(0f, -2f));
-                Despawn();
-            }
-            if (Input.GetKeyDown(KeyCode.S))
-            {
-                Debug.Log("1");
-                transform.DOKill();
-                Move(transform.position + new Vector3(0f, -0.5f));
-            }
-        }
-
         public Tween Move(Vector3 pos)
         {
             transform.DOKill();
+            ToggleHighlight(false);
+
             return transform.DOMove(pos, 0.5f).SetEase(Ease.OutBack);
         }
         public Tween Spin()
         {
             transform.DOKill();
+            ToggleHighlight(false);
+
             return _visual.transform.DORotate(new Vector3(0f, 360f, 0f), 0.25f, RotateMode.FastBeyond360);
         }
         public Tween Shrink()
         {
             transform.DOKill();
+            ToggleHighlight(false);
+
             return _visual.transform.DOScale(Vector3.zero, 0.35f).SetEase(Ease.InBack);
         }
         public void Despawn()
         {
             transform.DOKill();
+            ToggleHighlight(false);
 
             Sequence seq = DOTween.Sequence();
             seq.Append(Spin());
