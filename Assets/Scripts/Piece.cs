@@ -10,41 +10,45 @@ namespace Match3NonPhys
         [field: SerializeField] private PieceType _type;
         [field: SerializeField] private GameObject _highlight;
         [field: SerializeField] private GameObject _visual;
-        private Tween _currentTween;
 
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.A))
             {
-                Move(new Vector3(transform.position.x, transform.position.y - 3f, 0f));
-                //Spin();
-                //Despawn();
+                //Move(transform.position + new Vector3(0f, -2f));
+                Despawn();
             }
             if (Input.GetKeyDown(KeyCode.S))
             {
-                transform.position = new Vector3(transform.position.x, 0f, 0f);
+                Debug.Log("1");
+                transform.DOKill();
+                Move(transform.position + new Vector3(0f, -0.5f));
             }
         }
 
-        public void Move(Vector3 pos)
+        public Tween Move(Vector3 pos)
         {
-            if (_currentTween != null && _currentTween.IsActive())
-            {
-                if (_currentTween.IsPlaying()) { return; }
-            }
-            _currentTween = transform.DOMove(pos, 0.5f).SetEase(Ease.OutBack);
+            transform.DOKill();
+            return transform.DOMove(pos, 0.5f).SetEase(Ease.OutBack);
         }
-        public void Spin()
+        public Tween Spin()
         {
-            if (_currentTween != null && _currentTween.IsActive())
-            {
-                if (_currentTween.IsPlaying()) { return; }
-            }
-            _currentTween = _visual.transform.DORotate(new Vector3(0f, 360f, 0f), 0.25f, RotateMode.FastBeyond360);
+            transform.DOKill();
+            return _visual.transform.DORotate(new Vector3(0f, 360f, 0f), 0.25f, RotateMode.FastBeyond360);
+        }
+        public Tween Shrink()
+        {
+            transform.DOKill();
+            return _visual.transform.DOScale(Vector3.zero, 0.35f).SetEase(Ease.InBack);
         }
         public void Despawn()
         {
-            _visual.transform.DOScale(Vector3.zero, 0.15f).SetEase(Ease.InBack).OnComplete(()=> 
+            transform.DOKill();
+
+            Sequence seq = DOTween.Sequence();
+            seq.Append(Spin());
+            seq.Join(Shrink());
+            seq.OnComplete(()=> 
             {
                 transform.DOKill();
                 Destroy(gameObject);
