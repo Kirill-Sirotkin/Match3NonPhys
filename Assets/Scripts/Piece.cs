@@ -7,7 +7,7 @@ namespace Match3NonPhys
 {
     public class Piece : MonoBehaviour, IClickable
     {
-        [field: SerializeField] private PieceType _type;
+        [field: SerializeField] public PieceType _type { get; private set; }
         [field: SerializeField] private GameObject _highlight;
         [field: SerializeField] private GameObject _visual;
 
@@ -32,7 +32,7 @@ namespace Match3NonPhys
 
             return _visual.transform.DOScale(Vector3.zero, 0.35f).SetEase(Ease.InBack);
         }
-        public void Despawn()
+        public Sequence Despawn()
         {
             transform.DOKill();
             ToggleHighlight(false);
@@ -46,6 +46,7 @@ namespace Match3NonPhys
                 Destroy(gameObject);
             });
 
+            return seq;
         }
         public void ToggleHighlight(bool b)
         {
