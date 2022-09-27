@@ -125,13 +125,15 @@ namespace Match3NonPhys
         {
             if (dic.Count < 1) { return; }
             float sequenceDuration = dic.ElementAt(0).Value.Despawn().Duration();
+            Sequence seq = DOTween.Sequence();
 
             foreach(Piece p in dic.Values)
             {
-                p.Despawn();
+                seq.Join(p.Despawn());
             }
 
             //Invoke("CheckForPatterns", sequenceDuration);
+            seq.OnComplete(()=> { CheckForPatterns(); });
         }
     }
 }

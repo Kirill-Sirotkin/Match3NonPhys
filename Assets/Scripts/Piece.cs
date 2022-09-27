@@ -43,7 +43,7 @@ namespace Match3NonPhys
             seq.OnComplete(()=> 
             {
                 transform.DOKill();
-                Destroy(gameObject);
+                gameObject.SetActive(false);
             });
 
             return seq;
