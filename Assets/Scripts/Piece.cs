@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using System;
 
 namespace Match3NonPhys
 {
@@ -10,32 +11,29 @@ namespace Match3NonPhys
         [field: SerializeField] public PieceType _type { get; private set; }
         [field: SerializeField] private GameObject _highlight;
         [field: SerializeField] private GameObject _visual;
+        public bool _isIdle { get; private set; } = true;
 
         public Tween Move(Vector3 pos)
         {
-            transform.DOKill();
-            ToggleHighlight(false);
-
-            return transform.DOMove(pos, 0.5f).SetEase(Ease.OutBack);
+            ActivatePieceAnimation();
+            return transform.DOMove(pos, 0.5f).SetEase(Ease.OutBack)
+                .OnComplete(()=> { _isIdle = true; });
         }
         public Tween Spin()
         {
-            transform.DOKill();
-            ToggleHighlight(false);
-
-            return _visual.transform.DORotate(new Vector3(0f, 360f, 0f), 0.25f, RotateMode.FastBeyond360);
+            ActivatePieceAnimation();
+            return _visual.transform.DORotate(new Vector3(0f, 360f, 0f), 0.25f, RotateMode.FastBeyond360)
+                .OnComplete(() => { _isIdle = true; });
         }
         public Tween Shrink()
         {
-            transform.DOKill();
-            ToggleHighlight(false);
-
-            return _visual.transform.DOScale(Vector3.zero, 0.35f).SetEase(Ease.InBack);
+            ActivatePieceAnimation();
+            return _visual.transform.DOScale(Vector3.zero, 0.35f).SetEase(Ease.InBack)
+                .OnComplete(() => { _isIdle = true; });
         }
         public Sequence Despawn()
         {
-            transform.DOKill();
-            ToggleHighlight(false);
+            ActivatePieceAnimation();
 
             Sequence seq = DOTween.Sequence();
             seq.Append(Spin());
@@ -43,6 +41,7 @@ namespace Match3NonPhys
             seq.OnComplete(()=> 
             {
                 transform.DOKill();
+                _isIdle = true;
                 gameObject.SetActive(false);
             });
 
@@ -59,6 +58,12 @@ namespace Match3NonPhys
         public void ClickAction()
         {
             ToggleHighlight();
+        }
+        private void ActivatePieceAnimation()
+        {
+            transform.DOKill();
+            _isIdle = false;
+            ToggleHighlight(false);
         }
     }
 

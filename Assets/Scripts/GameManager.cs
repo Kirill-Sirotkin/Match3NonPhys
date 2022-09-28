@@ -17,6 +17,17 @@ namespace Match3NonPhys
 
         private Piece _selectedPiece = null;
 
+        private void Update()
+        {
+            bool b = true;
+            foreach(Piece p in _piecesParent.transform.GetComponentsInChildren<Piece>())
+            {
+                if (p.gameObject.activeSelf == false) { continue; }
+                if (!p._isIdle) { b = false; }
+            }
+            Debug.Log(b);
+        }
+
         public void PassSelection(RaycastHit hit)
         {
             IClickable clickable = hit.transform.GetComponent<IClickable>();
@@ -29,8 +40,6 @@ namespace Match3NonPhys
 
             ActionOnSelection(piece.gameObject);
         }
-
-
         private void PieceAction(GameObject g)
         {
             Piece piece = g.GetComponent<Piece>();
@@ -52,8 +61,6 @@ namespace Match3NonPhys
 
             SwapPieces(piece);
         }
-
-
         private void SwapPieces(Piece piece)
         {
             Vector3 swapPos = piece.transform.position;
@@ -67,8 +74,6 @@ namespace Match3NonPhys
             _selectedPiece = null;
             piece.ToggleHighlight(false);
         }
-
-
         private void CheckForPatterns()
         {
             Piece[] _pieces = _piecesParent.GetComponentsInChildren<Piece>();
@@ -109,8 +114,6 @@ namespace Match3NonPhys
             Debug.Log(piecesToDespawn.Count);
             DespawnMatchingPieces(piecesToDespawn);
         }
-
-
         private Piece GetRayPiece(Vector3 pos)
         {
             Vector3 direction = Vector3.forward;
@@ -119,8 +122,6 @@ namespace Match3NonPhys
             if (!Physics.Raycast(pos, direction, out hit, 2f)) { return null; }
             return hit.transform.GetComponent<Piece>();
         }
-
-
         private void DespawnMatchingPieces(Dictionary<int, Piece> dic)
         {
             if (dic.Count < 1) { return; }
@@ -132,7 +133,6 @@ namespace Match3NonPhys
                 seq.Join(p.Despawn());
             }
 
-            //Invoke("CheckForPatterns", sequenceDuration);
             seq.OnComplete(()=> { CheckForPatterns(); });
         }
     }
