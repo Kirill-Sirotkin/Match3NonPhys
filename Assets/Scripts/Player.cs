@@ -8,9 +8,12 @@ namespace Match3NonPhys
     public class Player : MonoBehaviour
     {
         [field: SerializeField] private GameManager _manager;
+        public bool _takeInputs { get; set; } = true;
 
         private void Update()
         {
+            if (!_takeInputs) { return; }
+
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
                 MouseRay();

@@ -16,16 +16,18 @@ namespace Match3NonPhys
         private ActionOnSelectionDelegate ActionOnSelection;
 
         private Piece _selectedPiece = null;
+        private Piece[] _swappedPieces = new Piece[2];
 
-        private void Update()
+        private void LateUpdate()
         {
-            bool b = true;
-            foreach(Piece p in _piecesParent.transform.GetComponentsInChildren<Piece>())
+            if (CheckPiecesIdle())
             {
-                if (p.gameObject.activeSelf == false) { continue; }
-                if (!p._isIdle) { b = false; }
+                _player._takeInputs = true;
             }
-            Debug.Log(b);
+            else
+            {
+                _player._takeInputs = false;
+            }
         }
 
         public void PassSelection(RaycastHit hit)
@@ -50,7 +52,10 @@ namespace Match3NonPhys
                 return;
             }
 
-            if (Vector3.Distance(_selectedPiece.transform.position, piece.transform.position) > 1.1f)
+            bool distance = Vector3.Distance(_selectedPiece.transform.position, piece.transform.position) > 1.1f;
+            bool samePiece = _selectedPiece.gameObject.GetInstanceID() == piece.gameObject.GetInstanceID();
+
+            if (distance || samePiece)
             {
                 _selectedPiece.ToggleHighlight(false);
                 _selectedPiece = null;
@@ -61,20 +66,23 @@ namespace Match3NonPhys
 
             SwapPieces(piece);
         }
-        private void SwapPieces(Piece piece)
+        private void SwapPieces(Piece piece, bool checkForPatters = true)
         {
             Vector3 swapPos = piece.transform.position;
             Sequence seq = DOTween.Sequence();
 
             seq.Append(piece.Move(_selectedPiece.transform.position));
             seq.Join(_selectedPiece.Move(swapPos));
-            seq.OnComplete(() => { CheckForPatterns(); });
+            if (checkForPatters) { seq.OnComplete(() => { CheckForPatterns(); }); }
+            
+            _swappedPieces[0] = _selectedPiece;
+            _swappedPieces[1] = piece;
 
             _selectedPiece.ToggleHighlight(false);
             _selectedPiece = null;
             piece.ToggleHighlight(false);
         }
-        private void CheckForPatterns()
+        private int CheckForPatterns()
         {
             Piece[] _pieces = _piecesParent.GetComponentsInChildren<Piece>();
             Dictionary<int, Piece> piecesToDespawn = new Dictionary<int, Piece>();
@@ -111,8 +119,15 @@ namespace Match3NonPhys
                 temporaryPieces.Clear();
             }
 
-            Debug.Log(piecesToDespawn.Count);
+            //Debug.Log(piecesToDespawn.Count);
             DespawnMatchingPieces(piecesToDespawn);
+            if (piecesToDespawn.Count > 0) { return piecesToDespawn.Count; }
+            if (_swappedPieces[0] == null || _swappedPieces[1] == null) { return piecesToDespawn.Count; }
+
+            _selectedPiece = _swappedPieces[0];
+            SwapPieces(_swappedPieces[1], false);
+
+            return piecesToDespawn.Count;
         }
         private Piece GetRayPiece(Vector3 pos)
         {
@@ -134,6 +149,19 @@ namespace Match3NonPhys
             }
 
             seq.OnComplete(()=> { CheckForPatterns(); });
+
+            _swappedPieces[0] = null;
+            _swappedPieces[1] = null;
+        }
+        private bool CheckPiecesIdle()
+        {
+            bool b = true;
+            foreach(Piece p in _piecesParent.GetComponentsInChildren<Piece>())
+            {
+                if (p.gameObject.activeSelf == false) { continue; }
+                if (!p._isIdle) { b = false; }
+            }
+            return b;
         }
     }
 }
