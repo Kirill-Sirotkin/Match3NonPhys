@@ -150,12 +150,12 @@ namespace Match3NonPhys
             }
 
             seq.OnComplete(()=> 
-            { 
+            {
                 foreach (Piece p in dic.Values)
                 {
                     _spawner.SpawnPiece(p.transform.position + new Vector3(0f, 5f, 0f), _piecesParent);
-                    _spawner.MovePiecesDown();
                 }
+                _spawner.MovePiecesDown();
             });
 
             _swappedPieces[0] = null;
