@@ -101,23 +101,26 @@ namespace Match3NonPhys
 
                 for (int i = 0; i < directions.GetLength(0); i++)
                 {
-                    Piece rayPiece = GetRayPiece(origin + directions[i]);
-                    if (rayPiece == null) { continue; }
-
-                    if (rayPiece._type == p._type) { temporaryPieces.Add(rayPiece); }
-                }
-
-                if (temporaryPieces.Count > 1)
-                {
-                    temporaryPieces.Add(p);
-                    foreach (Piece tempP in temporaryPieces)
+                    for (int j = 1; j < 11; j++)
                     {
-                        if (piecesToDespawn.ContainsKey(tempP.gameObject.GetInstanceID())) { continue; }
-                        piecesToDespawn.Add(tempP.gameObject.GetInstanceID(), tempP);
+                        Piece rayPiece = GetRayPiece(origin + directions[i]*j);
+                        if (rayPiece == null) { break; }
+                        if (rayPiece._type != p._type) { break; }
+                        temporaryPieces.Add(rayPiece);
                     }
-                }
 
-                temporaryPieces.Clear();
+                    if (temporaryPieces.Count > 1)
+                    {
+                        temporaryPieces.Add(p);
+                        foreach (Piece tempP in temporaryPieces)
+                        {
+                            if (piecesToDespawn.ContainsKey(tempP.gameObject.GetInstanceID())) { continue; }
+                            piecesToDespawn.Add(tempP.gameObject.GetInstanceID(), tempP);
+                        }
+                    }
+
+                    temporaryPieces.Clear();
+                }
             }
 
             //Debug.Log(piecesToDespawn.Count);
