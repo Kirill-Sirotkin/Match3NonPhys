@@ -11,6 +11,7 @@ namespace Match3NonPhys
     {
         [field: SerializeField] private Player _player;
         [field: SerializeField] private Transform _piecesParent;
+        [field: SerializeField] private Spawner _spawner;
 
         private delegate void ActionOnSelectionDelegate(GameObject g);
         private ActionOnSelectionDelegate ActionOnSelection;
@@ -148,7 +149,14 @@ namespace Match3NonPhys
                 seq.Join(p.Despawn());
             }
 
-            seq.OnComplete(()=> { CheckForPatterns(); });
+            seq.OnComplete(()=> 
+            { 
+                foreach (Piece p in dic.Values)
+                {
+                    _spawner.SpawnPiece(p.transform.position + new Vector3(0f, 5f, 0f), _piecesParent);
+                    _spawner.MovePiecesDown();
+                }
+            });
 
             _swappedPieces[0] = null;
             _swappedPieces[1] = null;
