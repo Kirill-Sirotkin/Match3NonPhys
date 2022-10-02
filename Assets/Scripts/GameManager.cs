@@ -83,7 +83,7 @@ namespace Match3NonPhys
             _selectedPiece = null;
             piece.ToggleHighlight(false);
         }
-        private int CheckForPatterns()
+        public int CheckForPatterns()
         {
             Piece[] _pieces = _piecesParent.GetComponentsInChildren<Piece>();
             Dictionary<int, Piece> piecesToDespawn = new Dictionary<int, Piece>();

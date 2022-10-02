@@ -7,6 +7,7 @@ namespace Match3NonPhys
 {
     public class Spawner : MonoBehaviour
     {
+        [field: SerializeField] private GameManager _manager;
         [field: SerializeField] private GameObject _redPiece;
         [field: SerializeField] private GameObject _bluePiece;
         [field: SerializeField] private GameObject _yellowPiece;
@@ -26,7 +27,7 @@ namespace Match3NonPhys
 
             return obj;
         }
-        public void MovePiecesDown()
+        public Sequence MovePiecesDown()
         {
             Vector3[] startVectors = new Vector3[] { 
                 new Vector3(-3f, -4f, 0f),
@@ -37,28 +38,44 @@ namespace Match3NonPhys
                 new Vector3(2f, -4f, 0f),
                 new Vector3(3f, -4f, 0f)
             };
+            Sequence seq = DOTween.Sequence();
 
             foreach (Vector3 v in startVectors)
             {
-                Vector3 newStartVector = Vector3.zero;
                 List<Vector3> emptySpaces = new List<Vector3>();
-                bool newStartFound = false;
+                List<Piece> piecesToMove = new List<Piece>();
 
-                for (int i = 0; i < 5; i++)
+                for (int i = 0; i < 10; i++)
                 {
                     Vector3 pos = v + new Vector3(0f, i, -1.05f);
                     Vector3 direction = Vector3.forward;
                     RaycastHit hit;
 
                     if (!Physics.Raycast(pos, direction, out hit, 2f)) 
+                    { 
+                        if (pos.y < 0.5f) { emptySpaces.Add(new Vector3(v.x, v.y + i, v.z)); }
+                        continue; 
+                    }
+                    Piece piece = hit.transform.GetComponent<Piece>();
+                    if (piece != null)
                     {
-                        if (!newStartFound) { newStartVector = new Vector3(v.x, v.y + i, v.z); newStartFound = true; }
+                        piecesToMove.Add(piece);
+
+                        if (pos.y > 0.5f) { continue; }
                         emptySpaces.Add(new Vector3(v.x, v.y + i, v.z));
                     }
                 }
 
-                Debug.Log(newStartVector);
+                if (piecesToMove.Count != emptySpaces.Count) { Debug.Log("no equality on line: " + v.x + " pieces: " + piecesToMove.Count + " empty: " + emptySpaces.Count); }
+
+                for (int i = 0; i < piecesToMove.Count; i++)
+                {
+                    seq.Join(piecesToMove[i].Move(emptySpaces[i]));
+                }
             }
+            seq.OnComplete(()=> { _manager.CheckForPatterns(); });
+
+            return seq;
         }
     }
 }
