@@ -52,8 +52,8 @@ namespace Match3NonPhys
 
                     if (!Physics.Raycast(pos, direction, out hit, 2f)) 
                     {
-                        if (!newStartFound) { newStartVector = new Vector3(v.x, i, v.z); newStartFound = true; }
-                        emptySpaces.Add(new Vector3(v.x, i, v.z));
+                        if (!newStartFound) { newStartVector = new Vector3(v.x, v.y + i, v.z); newStartFound = true; }
+                        emptySpaces.Add(new Vector3(v.x, v.y + i, v.z));
                     }
                 }
 
