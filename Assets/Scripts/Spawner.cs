@@ -73,7 +73,11 @@ namespace Match3NonPhys
                     seq.Join(piecesToMove[i].Move(emptySpaces[i]));
                 }
             }
-            seq.OnComplete(()=> { _manager.CheckForPatterns(); });
+            seq.OnComplete(()=> 
+            {
+                _manager.CleanUp();
+                _manager.CheckForPatterns(); 
+            });
 
             return seq;
         }

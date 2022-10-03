@@ -19,6 +19,11 @@ namespace Match3NonPhys
         private Piece _selectedPiece = null;
         private Piece[] _swappedPieces = new Piece[2];
 
+        private void Start()
+        {
+            GameStartSpawn();
+        }
+
         private void LateUpdate()
         {
             if (CheckPiecesIdle())
@@ -173,6 +178,30 @@ namespace Match3NonPhys
                 if (!p._isIdle) { b = false; }
             }
             return b;
+        }
+        private void GameStartSpawn()
+        {
+            Vector3 startVector = new Vector3(-3f, 1f, 0f);
+            Sequence seq = DOTween.Sequence();
+
+            for (int i = 0; i < 7; i++)
+            {
+                for (int j = 0; j < 5; j++)
+                {
+                    GameObject obj = _spawner.SpawnPiece(startVector + new Vector3(i, j), _piecesParent);
+                    seq.Join(obj.GetComponent<Piece>().Move(startVector + new Vector3(i, j - 5)));
+                }
+            }
+
+            seq.OnComplete(() => { CheckForPatterns(); });
+        }
+        public void CleanUp()
+        {
+            foreach (Transform child in _piecesParent)
+            {
+                if (child.gameObject.activeSelf) { continue; }
+                Destroy(child.gameObject);
+            }
         }
     }
 }
