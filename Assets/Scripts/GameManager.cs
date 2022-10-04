@@ -131,10 +131,20 @@ namespace Match3NonPhys
             //Debug.Log(piecesToDespawn.Count);
             DespawnMatchingPieces(piecesToDespawn);
             if (piecesToDespawn.Count > 0) { return piecesToDespawn.Count; }
-            if (_swappedPieces[0] == null || _swappedPieces[1] == null) { return piecesToDespawn.Count; }
 
-            _selectedPiece = _swappedPieces[0];
-            SwapPieces(_swappedPieces[1], false);
+            if (_swappedPieces[0] != null && _swappedPieces[1] != null)
+            {
+                _selectedPiece = _swappedPieces[0];
+                SwapPieces(_swappedPieces[1], false);
+                return piecesToDespawn.Count;
+            }
+
+            int possibleMoves = 0;
+            foreach (Piece p in _piecesParent.GetComponentsInChildren<Piece>())
+            {
+                possibleMoves += CheckPossibleMoves(p.transform.position);
+            }
+            if (possibleMoves == 0) { ShufflePieces(); }
 
             return piecesToDespawn.Count;
         }
@@ -143,7 +153,7 @@ namespace Match3NonPhys
             Vector3 direction = Vector3.forward;
             RaycastHit hit;
 
-            if (!Physics.Raycast(pos, direction, out hit, 2f)) { return null; }
+            if (!Physics.Raycast(pos, direction, out hit, Mathf.Infinity)) { return null; }
             return hit.transform.GetComponent<Piece>();
         }
         private void DespawnMatchingPieces(Dictionary<int, Piece> dic)
@@ -202,6 +212,124 @@ namespace Match3NonPhys
                 if (child.gameObject.activeSelf) { continue; }
                 Destroy(child.gameObject);
             }
+        }
+        private int CheckPossibleMoves(Vector3 pos)
+        {
+            int p1 = CheckPattern1(pos);
+            int p2 = CheckPattern2(pos);
+            int p3 = CheckPattern3(pos);
+
+            return p1 + p2 + p3;
+        }
+        private int CheckPattern1(Vector3 pos)
+        {
+            int res = 0;
+            Vector3 modifierVector = new Vector3(1f, 1f, -1.05f);
+            PieceType type = GetRayPiece(pos + new Vector3(0f, 0f, -1.05f))._type;
+
+            for (int i = 0; i < 4; i++)
+            {
+                Vector3 checkVector = pos + modifierVector;
+                //Debug.Log(checkVector);
+                Piece p = GetRayPiece(checkVector);
+
+                if (p != null && p._type == type)
+                {
+                    Vector3 v1 = pos + new Vector3(modifierVector.x * 2, modifierVector.y * 0, modifierVector.z);
+                    Vector3 v2 = pos + new Vector3(modifierVector.x * 0, modifierVector.y * 2, modifierVector.z);
+
+                    Piece p2 = GetRayPiece(v1);
+                    if (p2 != null && p2._type == type) { res++; }
+                    
+                    p2 = GetRayPiece(v2);
+                    if (p2 != null && p2._type == type) { res++; }
+                }
+
+                modifierVector = new Vector3(modifierVector.y, modifierVector.x * -1, modifierVector.z);
+            }
+
+            return res;
+        }
+        private int CheckPattern2(Vector3 pos)
+        {
+            int res = 0;
+            Vector3 modifierVector = new Vector3(1f, 0f, -1.05f);
+            PieceType type = GetRayPiece(pos + new Vector3(0f, 0f, -1.05f))._type;
+
+            for (int i = 0; i < 4; i++)
+            {
+                Vector3 checkVector = pos + modifierVector;
+                //Debug.Log(checkVector);
+                Piece p = GetRayPiece(checkVector);
+
+                if (p != null && p._type == type)
+                {
+                    Vector3 v1 = pos + modifierVector * 2 + new Vector3(modifierVector.y, modifierVector.x);
+                    Vector3 v2 = pos + modifierVector * 2 + new Vector3(modifierVector.y, modifierVector.x) * -1;
+
+                    Piece p2 = GetRayPiece(v1);
+                    if (p2 != null && p2._type == type) { res++; }
+
+                    p2 = GetRayPiece(v2);
+                    if (p2 != null && p2._type == type) { res++; }
+                }
+
+                modifierVector = new Vector3(modifierVector.y, modifierVector.x * -1, modifierVector.z);
+            }
+
+            return res;
+        }
+        private int CheckPattern3(Vector3 pos)
+        {
+            int res = 0;
+            Vector3 modifierVector = new Vector3(1f, 0f, -1.05f);
+            PieceType type = GetRayPiece(pos + new Vector3(0f, 0f, -1.05f))._type;
+
+            for (int i = 0; i < 4; i++)
+            {
+                Vector3 checkVector = pos + modifierVector;
+                //Debug.Log(checkVector);
+                Piece p = GetRayPiece(checkVector);
+
+                if (p != null && p._type == type)
+                {
+                    Vector3 v1 = pos + modifierVector * 3;
+
+                    Piece p2 = GetRayPiece(v1);
+                    if (p2 != null && p2._type == type) { res++; }
+                }
+
+                modifierVector = new Vector3(modifierVector.y, modifierVector.x * -1, modifierVector.z);
+            }
+
+            return res;
+        }
+        private Sequence ShufflePieces()
+        {
+            Sequence seq = DOTween.Sequence();
+            List<Piece> pieces = new List<Piece>();
+            foreach(Piece p in _piecesParent.GetComponentsInChildren<Piece>())
+            {
+                pieces.Add(p);
+            }
+
+            List<Piece> shuffledPieces = new List<Piece>();
+            List<Piece> copiedPieces = new List<Piece>(pieces);
+            for (int i = 0; i < pieces.Count; i++)
+            {
+                int index = UnityEngine.Random.Range(0, copiedPieces.Count);
+
+                shuffledPieces.Add(copiedPieces[index]);
+                copiedPieces.RemoveAt(index);
+            }
+
+            for (int i = 0; i < pieces.Count; i++)
+            {
+                seq.Join(pieces[i].Move(shuffledPieces[i].transform.position));
+            }
+            seq.OnComplete(() => { CheckForPatterns(); });
+
+            return seq;
         }
     }
 }
