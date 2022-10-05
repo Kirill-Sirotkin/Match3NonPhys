@@ -9,7 +9,6 @@ namespace Match3NonPhys
     {
         [field: SerializeField] private GameManager _manager;
         public bool _takeInputs { get; set; } = true;
-        // player new LINE
 
         private void Update()
         {

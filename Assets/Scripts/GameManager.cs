@@ -18,7 +18,6 @@ namespace Match3NonPhys
 
         private Piece _selectedPiece = null;
         private Piece[] _swappedPieces = new Piece[2];
-        // new LINE
 
         private void Start()
         {
