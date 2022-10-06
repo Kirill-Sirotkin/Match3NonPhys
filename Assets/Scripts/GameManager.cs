@@ -7,21 +7,30 @@ using DG.Tweening;
 
 namespace Match3NonPhys
 {
-    public class GameManager : MonoBehaviour
+    public class GameManager : StateManager
     {
-        [field: SerializeField] private Player _player;
-        [field: SerializeField] private Transform _piecesParent;
-        [field: SerializeField] private Spawner _spawner;
+        [field: SerializeField] public Player _player { get; private set; }
+        [field: SerializeField] public Transform _piecesParent { get; private set; }
+        [field: SerializeField] public Spawner _spawner { get; private set; }
 
         private delegate void ActionOnSelectionDelegate(GameObject g);
         private ActionOnSelectionDelegate ActionOnSelection;
 
-        private Piece _selectedPiece = null;
-        private Piece[] _swappedPieces = new Piece[2];
+        public Piece _selectedPiece { get; private set; } = null;
+        public Piece[] _swappedPieces { get; private set; } = new Piece[2];
+
+        [field: SerializeField] private GameObject _redPiece;
+        [field: SerializeField] private GameObject _bluePiece;
+        [field: SerializeField] private GameObject _yellowPiece;
+        [field: SerializeField] private GameObject _purplePiece;
+        [field: SerializeField] private GameObject _greenPiece;
+        public GameObject[] _pieces { get; private set; }
 
         private void Start()
         {
-            GameStartSpawn();
+            //GameStartSpawn();
+            _pieces = new GameObject[] { _redPiece, _bluePiece, _yellowPiece, _purplePiece, _greenPiece };
+            SetState(new BeginState(this));
         }
 
         private void LateUpdate()
