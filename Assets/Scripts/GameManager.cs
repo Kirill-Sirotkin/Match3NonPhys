@@ -25,6 +25,7 @@ namespace Match3NonPhys
         [field: SerializeField] private GameObject _purplePiece;
         [field: SerializeField] private GameObject _greenPiece;
         public GameObject[] _pieces { get; private set; }
+        public bool _takeInput { get; set; }
 
         private void Start()
         {
@@ -33,18 +34,32 @@ namespace Match3NonPhys
             SetState(new BeginState(this));
         }
 
-        private void LateUpdate()
+        private void Update()
         {
-            if (CheckPiecesIdle())
-            {
-                _player._takeInputs = true;
-            }
-            else
-            {
-                _player._takeInputs = false;
-            }
+            if (!_takeInput) { return; }
+            if (Input.GetMouseButtonDown(0)) { Debug.Log("LMB pressed"); MouseRay(); }
         }
 
+        private void LateUpdate()
+        {
+            //if (CheckPiecesIdle())
+            //{
+            //    _player._takeInputs = true;
+            //}
+            //else
+            //{
+            //    _player._takeInputs = false;
+            //}
+        }
+
+        private void MouseRay()
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (!Physics.Raycast(ray, out hit, 100)) { return; }
+            PassSelection(hit);
+        }
         public void PassSelection(RaycastHit hit)
         {
             IClickable clickable = hit.transform.GetComponent<IClickable>();

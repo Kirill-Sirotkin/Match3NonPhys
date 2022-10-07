@@ -10,6 +10,9 @@ namespace Match3NonPhys
         {
         }
 
-
+        public override void StartAction()
+        {
+            gameManager._takeInput = true;
+        }
     }
 }

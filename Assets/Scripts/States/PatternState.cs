@@ -12,7 +12,7 @@ namespace Match3NonPhys
 
         public override void StartAction()
         {
-
+            gameManager.SetState(new PlayerState(gameManager));
         }
     }
 }

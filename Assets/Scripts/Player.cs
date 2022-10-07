@@ -8,7 +8,7 @@ namespace Match3NonPhys
     public class Player : MonoBehaviour
     {
         [field: SerializeField] private GameManager _manager;
-        public bool _takeInputs { get; set; } = true;
+        public bool _takeInputs { get; set; } = false;
 
         private void Update()
         {

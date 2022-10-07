@@ -20,6 +20,8 @@ namespace Match3NonPhys
             {
                 SpawnPiece(v, gameManager._piecesParent);
             }
+
+            gameManager.SetState(new PatternState(gameManager));
         }
 
         public GameObject SpawnPiece(Vector3 pos, Transform parent)
@@ -28,6 +30,21 @@ namespace Match3NonPhys
             GameObject obj = Object.Instantiate(gameManager._pieces[index], pos, Quaternion.identity, parent);
 
             return obj;
+        }
+        private Sequence MovePiecesDown()
+        {
+            Sequence seq = DOTween.Sequence();
+
+            for (int i = -3; i < 4; i++)
+            {
+                for (int j = -4; j < 1; j++)
+                {
+                    // make ray
+                    // move to lowest position
+                }
+            }
+
+            return seq;
         }
     }
 }
