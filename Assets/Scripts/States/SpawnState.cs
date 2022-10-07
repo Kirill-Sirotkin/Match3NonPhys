@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 namespace Match3NonPhys
 {
@@ -19,8 +20,6 @@ namespace Match3NonPhys
             {
                 SpawnPiece(v, gameManager._piecesParent);
             }
-
-            gameManager.SetState(new PatternState(gameManager));
         }
 
         public GameObject SpawnPiece(Vector3 pos, Transform parent)
