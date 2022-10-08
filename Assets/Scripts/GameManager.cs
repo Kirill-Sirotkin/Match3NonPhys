@@ -52,15 +52,20 @@ namespace Match3NonPhys
             //}
         }
 
+        public Piece GetRayPiece(Vector3 origin, Vector3 direction, bool mouseSelection = false)
+        {
+            RaycastHit hit;
+            if (!Physics.Raycast(origin, direction, out hit, Mathf.Infinity)) { return null; }
+
+            if (mouseSelection) { PassSelection(hit); }
+            return hit.transform.GetComponent<Piece>();
+        }
         private void MouseRay()
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-
-            if (!Physics.Raycast(ray, out hit, 100)) { return; }
-            PassSelection(hit);
+            GetRayPiece(ray.origin, ray.direction);
         }
-        public void PassSelection(RaycastHit hit)
+        private void PassSelection(RaycastHit hit)
         {
             IClickable clickable = hit.transform.GetComponent<IClickable>();
             Piece piece = hit.transform.GetComponent<Piece>();

@@ -16,7 +16,7 @@ namespace Match3NonPhys
 
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
-                MouseRay();
+                //MouseRay();
             }
         }
 
@@ -26,7 +26,7 @@ namespace Match3NonPhys
             RaycastHit hit;
 
             if (!Physics.Raycast(ray, out hit, 100)) { return; }
-            _manager.PassSelection(hit);
+            //_manager.PassSelection(hit);
         }
     }
 

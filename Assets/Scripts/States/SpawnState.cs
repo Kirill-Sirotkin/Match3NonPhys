@@ -37,7 +37,9 @@ namespace Match3NonPhys
 
             for (int i = -3; i < 4; i++)
             {
-                for (int j = -4; j < 1; j++)
+                Vector3 rayOrigin = new Vector3(i, -5f, 0f);
+
+                for (int j = 0; j < 5; j++)
                 {
                     // make ray
                     // move to lowest position
