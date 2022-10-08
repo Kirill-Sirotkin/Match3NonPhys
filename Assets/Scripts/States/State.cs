@@ -13,5 +13,6 @@ namespace Match3NonPhys
         }
 
         public virtual void StartAction() { }
+        public virtual void SwitchState() { }
     }
 }

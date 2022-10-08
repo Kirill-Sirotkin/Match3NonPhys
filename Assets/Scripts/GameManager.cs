@@ -26,6 +26,7 @@ namespace Match3NonPhys
         [field: SerializeField] private GameObject _greenPiece;
         public GameObject[] _pieces { get; private set; }
         public bool _takeInput { get; set; }
+        public Piece[] _lastSwappedPieces { get; set; } = new Piece[2];
 
         private void Start()
         {
@@ -63,7 +64,7 @@ namespace Match3NonPhys
         private void MouseRay()
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            GetRayPiece(ray.origin, ray.direction);
+            GetRayPiece(ray.origin, ray.direction, true);
         }
         private void PassSelection(RaycastHit hit)
         {
@@ -101,6 +102,9 @@ namespace Match3NonPhys
 
             SwapPieces(piece);
         }
+
+
+
         private void SwapPieces(Piece piece, bool checkForPatters = true)
         {
             Vector3 swapPos = piece.transform.position;

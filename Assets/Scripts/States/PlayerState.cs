@@ -14,5 +14,10 @@ namespace Match3NonPhys
         {
             gameManager._takeInput = true;
         }
+        public override void SwitchState()
+        {
+            gameManager._takeInput = false;
+            gameManager.SetState(new PatternState(gameManager, gameManager._lastSwappedPieces));
+        }
     }
 }
