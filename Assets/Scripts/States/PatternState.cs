@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 namespace Match3NonPhys
 {
@@ -13,22 +14,33 @@ namespace Match3NonPhys
 
         public override void StartAction()
         {
+            Sequence seq = DOTween.Sequence();
             foreach(Piece p in gameManager._piecesParent.GetComponentsInChildren<Piece>())
             {
                 AssignPatterns(p);
             }
-            Debug.Log("pieces to despawn: " + _matchedPieces.Count);
-            Debug.Log("piece patterns: " + _piecePatterns.Count);
-            foreach(KeyValuePair<Piece,List<Piece>> entry in _piecePatterns)
+
+            if (_piecePatterns.Count == 0 && _lastSwappedPieces != null) 
             {
-                Debug.Log("For piece: " + entry.Key.gameObject.name + " at " + entry.Key.transform.position + ", matches are: " + entry.Value.Count);
+                Debug.Log("swap");
+                seq = gameManager.SwapPieces(_lastSwappedPieces[0], _lastSwappedPieces[1]);
+                seq.OnComplete(() => { gameManager.SetState(new PlayerState(gameManager)); });
+                return;
             }
+            // Check for special pieces to be spawned
+
+            if (_piecePatterns.Count > 0)
+            {
+                gameManager.SetState(new DespawnState(gameManager, _piecePatterns));
+                return;
+            }
+
+            gameManager.SetState(new PlayerState(gameManager));
         }
 
         #region Own methods
 
         Piece[] _lastSwappedPieces;
-        Dictionary<int, Piece> _matchedPieces = new Dictionary<int, Piece>();
         Dictionary<Piece, List<Piece>> _piecePatterns = new Dictionary<Piece, List<Piece>>();
 
         private void AssignPatterns(Piece piece)
@@ -72,24 +84,10 @@ namespace Match3NonPhys
             patternPieces.Add(piece);
             if (patternPieces.Count < 3) { return; }
 
-            if (patternPieces.Count > 4) { Debug.Log("5 or more pieces matched! at: " + piece.transform.position); }
-            else if (patternPieces.Count == 4) { Debug.Log("4 pieces matched! at: " + piece.transform.position); }
-
-            //Debug.Log("for piece: " + piece.name + " pattern is " + patternPieces.Count + " (" + piece.transform.position + ")");
-
             List<Piece> matches = new List<Piece>(patternPieces);
             matches.RemoveAt(matches.Count - 1);
 
-            if (!_piecePatterns.ContainsKey(piece))
-            {
-                _piecePatterns.Add(piece, matches);
-            }
-
-            //foreach (Piece p in patternPieces)
-            //{
-            //    if (_matchedPieces.ContainsKey(p.gameObject.GetInstanceID())) { continue; }
-            //    _matchedPieces.Add(p.gameObject.GetInstanceID(), p);
-            //}
+            if (!_piecePatterns.ContainsKey(piece)) { _piecePatterns.Add(piece, matches); }
         }
 
         #endregion

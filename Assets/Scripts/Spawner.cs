@@ -75,8 +75,8 @@ namespace Match3NonPhys
             }
             seq.OnComplete(()=> 
             {
-                _manager.CleanUp();
-                _manager.CheckForPatterns(); 
+                //_manager.CleanUp();
+                //_manager.CheckForPatterns(); 
             });
 
             return seq;
