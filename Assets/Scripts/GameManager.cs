@@ -36,7 +36,7 @@ namespace Match3NonPhys
         private void Update()
         {
             if (!_takeInput) { return; }
-            if (Input.GetMouseButtonDown(0)) { Debug.Log("LMB pressed"); MouseRay(); }
+            if (Input.GetMouseButtonDown(0)) { /*Debug.Log("LMB pressed");*/ MouseRay(); }
         }
 
         #endregion
@@ -223,7 +223,7 @@ namespace Match3NonPhys
             {
                 pieces.Add(p);
             }
-
+            
             List<Piece> shuffledPieces = new List<Piece>();
             List<Piece> copiedPieces = new List<Piece>(pieces);
             for (int i = 0; i < pieces.Count; i++)

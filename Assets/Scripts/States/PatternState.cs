@@ -35,7 +35,7 @@ namespace Match3NonPhys
                 return;
             }
 
-            gameManager.SetState(new PlayerState(gameManager));
+            gameManager.SetState(new ShuffleState(gameManager));
         }
 
         #region Own methods
