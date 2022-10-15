@@ -7,16 +7,27 @@ namespace Match3NonPhys
 {
     public class SpawnState : State
     {
-        public SpawnState(GameManager manager, List<Vector3> spawnPoints) : base(manager)
+        public SpawnState(GameManager manager, List<Vector3> spawnPoints, string seed = null) : base(manager)
         {
             _spawnPoints = new List<Vector3>(spawnPoints);
+            _seed = seed;
         }
 
         public override void StartAction()
         {
-            foreach (Vector3 v in _spawnPoints)
+            if (_seed == null)
             {
-                SpawnPiece(v, gameManager._piecesParent);
+                foreach (Vector3 v in _spawnPoints)
+                {
+                    SpawnPiece(v, gameManager._piecesParent);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < _spawnPoints.Count; i++)
+                {
+                    SpawnPiece(_spawnPoints[i], gameManager._piecesParent, _seed[i]);
+                }
             }
 
             Sequence seq = MovePiecesDown();
@@ -26,12 +37,42 @@ namespace Match3NonPhys
         #region Own methods
 
         private List<Vector3> _spawnPoints;
+        private string _seed;
 
         private GameObject SpawnPiece(Vector3 pos, Transform parent)
         {
             int index = Random.Range(0, gameManager._pieces.GetLength(0));
             GameObject obj = Object.Instantiate(gameManager._pieces[index], pos, Quaternion.identity, parent);
 
+            return obj;
+        }
+        private GameObject SpawnPiece(Vector3 pos, Transform parent, char pieceType)
+        {
+            int index;
+            switch (pieceType)
+            {
+                case 'r':
+                    index = 0;
+                    break;
+                case 'b':
+                    index = 1;
+                    break;
+                case 'y':
+                    index = 2;
+                    break;
+                case 'p':
+                    index = 3;
+                    break;
+                case 'g':
+                    index = 4;
+                    break;
+                default:
+                    index = 0;
+                    Debug.Log("Uknown piece signature in seed. Spawning default piece");
+                    break;
+            }
+
+            GameObject obj = Object.Instantiate(gameManager._pieces[index], pos, Quaternion.identity, parent);
             return obj;
         }
         private Sequence MovePiecesDown()

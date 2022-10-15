@@ -6,8 +6,9 @@ namespace Match3NonPhys
 {
     public class BeginState : State
     {
-        public BeginState(GameManager manager) : base(manager)
+        public BeginState(GameManager manager, string seed = null) : base(manager)
         {
+            _seed = seed;
         }
 
         public override void StartAction()
@@ -23,7 +24,21 @@ namespace Match3NonPhys
                 }
             }
 
-            gameManager.SetState(new SpawnState(gameManager, spawnPoints));
+            if (!IsSeedCorrect()) { gameManager.SetState(new SpawnState(gameManager, spawnPoints)); return; }
+            gameManager.SetState(new SpawnState(gameManager, spawnPoints, _seed));
         }
+
+        #region Own methods
+
+        private string _seed;
+
+        private bool IsSeedCorrect()
+        {
+            if (_seed == null) { return false; }
+            if (_seed.Length != 35) { return false; }
+            return true;
+        }
+
+        #endregion
     }
 }

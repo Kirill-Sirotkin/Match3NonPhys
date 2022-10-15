@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 namespace Match3NonPhys
 {
@@ -26,11 +27,9 @@ namespace Match3NonPhys
                 }
             }
 
-            Debug.Log("moves: " + movesExist);
-            if (!movesExist) { Debug.Log("No moves!"); }
-            else { Debug.Log("Moves exist"); gameManager.SetState(new PlayerState(gameManager)); }
-
-
+            if (movesExist) { gameManager.SetState(new PlayerState(gameManager)); return; }
+            Sequence seq = Shuffle();
+            seq.OnComplete(() => { gameManager.SetState(new PatternState(gameManager)); });
         }
 
         #region Own methods
@@ -48,8 +47,8 @@ namespace Match3NonPhys
 
             for (int i = 0; i < 4; i++)
             {
-                Piece checkPiece1 = gameManager.GetRayPiece(rotatingPattern[0] + rayStart, Vector3.forward);
-                Piece checkPiece2 = gameManager.GetRayPiece(rotatingPattern[1] + rayStart, Vector3.forward);
+                Piece checkPiece1 = gameManager.GetRayPiece(pos + rotatingPattern[0] + rayStart, Vector3.forward);
+                Piece checkPiece2 = gameManager.GetRayPiece(pos + rotatingPattern[1] + rayStart, Vector3.forward);
                 if (checkPiece1 != null && checkPiece2 != null &&
                     checkPiece1._type == pieceType && checkPiece2._type == pieceType)
                 {
@@ -59,8 +58,35 @@ namespace Match3NonPhys
                 rotatingPattern[0] = new Vector3(rotatingPattern[0].y, -1 * rotatingPattern[0].x);
                 rotatingPattern[1] = new Vector3(rotatingPattern[1].y, -1 * rotatingPattern[1].x);
             }
-            
+
             return false;
+        }
+
+        private Sequence Shuffle()
+        {
+            Sequence seq = DOTween.Sequence();
+            List<Piece> pieces = new List<Piece>();
+            foreach (Piece p in gameManager._piecesParent.GetComponentsInChildren<Piece>())
+            {
+                pieces.Add(p);
+            }
+
+            List<Piece> shuffledPieces = new List<Piece>();
+            List<Piece> copiedPieces = new List<Piece>(pieces);
+            for (int i = 0; i < pieces.Count; i++)
+            {
+                int index = Random.Range(0, copiedPieces.Count);
+
+                shuffledPieces.Add(copiedPieces[index]);
+                copiedPieces.RemoveAt(index);
+            }
+
+            for (int i = 0; i < pieces.Count; i++)
+            {
+                seq.Join(pieces[i].Move(shuffledPieces[i].transform.position));
+            }
+
+            return seq;
         }
 
         #endregion
