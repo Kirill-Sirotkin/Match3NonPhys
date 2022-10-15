@@ -102,11 +102,20 @@ namespace Match3NonPhys
             bool distance = Vector3.Distance(_selectedPiece.transform.position, piece.transform.position) > 1.1f;
             bool samePiece = _selectedPiece.gameObject.GetInstanceID() == piece.gameObject.GetInstanceID();
 
-            if (distance || samePiece)
+            if (samePiece)
             {
                 _selectedPiece.ToggleHighlight(false);
                 _selectedPiece = null;
                 piece.ToggleHighlight(false);
+
+                return;
+            }
+
+            if (distance)
+            {
+                _selectedPiece.ToggleHighlight(false);
+                _selectedPiece = piece;
+                piece.ToggleHighlight(true);
 
                 return;
             }
