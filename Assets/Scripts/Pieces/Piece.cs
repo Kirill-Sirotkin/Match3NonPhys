@@ -6,12 +6,13 @@ using System;
 
 namespace Match3NonPhys
 {
-    public class Piece : MonoBehaviour, IClickable
+    public class Piece : MonoBehaviour
     {
-        [field: SerializeField] public PieceType _type { get; private set; }
-        [field: SerializeField] private GameObject _highlight;
-        [field: SerializeField] private GameObject _visual;
-        public bool _isIdle { get; private set; } = true;
+        [field: SerializeField] protected GameManager _manager;
+        [field: SerializeField] public PieceType _type { get; protected set; }
+        [field: SerializeField] protected GameObject _visual;
+        [field: SerializeField] protected GameObject _highlight;
+        public bool _isIdle { get; protected set; } = true;
 
         public Tween Move(Vector3 pos)
         {
@@ -55,11 +56,7 @@ namespace Match3NonPhys
         {
             _highlight.SetActive(!_highlight.activeSelf);
         }
-        public void ClickAction()
-        {
-            ToggleHighlight();
-        }
-        private void ActivatePieceAnimation()
+        protected void ActivatePieceAnimation()
         {
             transform.DOKill();
             _isIdle = false;

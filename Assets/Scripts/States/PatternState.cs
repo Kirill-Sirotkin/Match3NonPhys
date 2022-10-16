@@ -22,7 +22,6 @@ namespace Match3NonPhys
 
             if (_piecePatterns.Count == 0 && _lastSwappedPieces != null) 
             {
-                Debug.Log("swap");
                 seq = gameManager.SwapPieces(_lastSwappedPieces[0], _lastSwappedPieces[1]);
                 seq.OnComplete(() => { gameManager.SetState(new PlayerState(gameManager)); });
                 return;

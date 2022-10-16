@@ -37,7 +37,7 @@ namespace Match3NonPhys
         private void Update()
         {
             if (!_takeInput) { return; }
-            if (Input.GetMouseButtonDown(0)) { /*Debug.Log("LMB pressed");*/ MouseRay(); }
+            if (Input.GetMouseButtonDown(0)) { MouseRay(); }
         }
 
         #endregion

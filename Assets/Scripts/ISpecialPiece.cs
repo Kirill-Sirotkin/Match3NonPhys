@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 namespace Match3NonPhys
 {
-    interface IClickable
+    public interface ISpecialPiece
     {
-        void ClickAction();
+        Sequence SpecialMove();
     }
 }
