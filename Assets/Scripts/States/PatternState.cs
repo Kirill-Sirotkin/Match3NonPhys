@@ -7,9 +7,8 @@ namespace Match3NonPhys
 {
     public class PatternState : State
     {
-        public PatternState(GameManager manager, Piece[] lastSwappedPieces = null) : base(manager)
+        public PatternState(GameManager manager) : base(manager)
         {
-            _lastSwappedPieces = lastSwappedPieces;
         }
 
         public override void StartAction()
@@ -20,13 +19,13 @@ namespace Match3NonPhys
                 AssignPatterns(p);
             }
 
-            if (_piecePatterns.Count == 0 && _lastSwappedPieces != null) 
+            bool lastSwappedNull = gameManager._lastSwappedPieces[0] == null || gameManager._lastSwappedPieces[1] == null;
+            if (_piecePatterns.Count == 0 && !lastSwappedNull) 
             {
-                seq = gameManager.SwapPieces(_lastSwappedPieces[0], _lastSwappedPieces[1]);
+                seq = gameManager.SwapPieces(gameManager._lastSwappedPieces[0], gameManager._lastSwappedPieces[1]);
                 seq.OnComplete(() => { gameManager.SetState(new PlayerState(gameManager)); });
                 return;
             }
-            // Check for special pieces to be spawned
 
             if (_piecePatterns.Count > 0)
             {
@@ -39,7 +38,6 @@ namespace Match3NonPhys
 
         #region Own methods
 
-        Piece[] _lastSwappedPieces;
         Dictionary<Piece, List<Piece>> _piecePatterns = new Dictionary<Piece, List<Piece>>();
 
         private void AssignPatterns(Piece piece)

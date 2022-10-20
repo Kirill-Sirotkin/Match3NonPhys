@@ -7,6 +7,6 @@ namespace Match3NonPhys
 {
     public interface ISpecialPiece
     {
-        Sequence SpecialMove();
+        List<Piece> SpecialMove();
     }
 }

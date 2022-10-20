@@ -7,16 +7,23 @@ namespace Match3NonPhys
 {
     public class BombPiece : Piece, ISpecialPiece, IClickable
     {
-        public Sequence SpecialMove()
+        public List<Piece> SpecialMove()
         {
-            Sequence seq = DOTween.Sequence();
+            List<Piece> pieces = new List<Piece>();
 
-            seq.Join(_manager.GetRayPiece(transform.position, Vector3.up).Despawn());
-            seq.Join(_manager.GetRayPiece(transform.position, Vector3.right).Despawn());
-            seq.Join(_manager.GetRayPiece(transform.position, Vector3.down).Despawn());
-            seq.Join(_manager.GetRayPiece(transform.position, Vector3.left).Despawn());
+            Piece p = _manager.GetRayPiece(transform.position, Vector3.up);
+            if(p != null) { pieces.Add(p); }
 
-            return seq;
+            p = _manager.GetRayPiece(transform.position, Vector3.right);
+            if (p != null) { pieces.Add(p); }
+
+            p = _manager.GetRayPiece(transform.position, Vector3.down);
+            if (p != null) { pieces.Add(p); }
+
+            p = _manager.GetRayPiece(transform.position, Vector3.left);
+            if (p != null) { pieces.Add(p); }
+
+            return pieces;
         }
         public void ClickAction()
         {
