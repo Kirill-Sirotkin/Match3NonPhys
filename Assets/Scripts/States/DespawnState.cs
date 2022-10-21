@@ -17,16 +17,54 @@ namespace Match3NonPhys
             Sequence seq = DOTween.Sequence();
             List<Vector3> spawnPoints = new List<Vector3>();
 
-            foreach(KeyValuePair<Piece, List<Piece>> p in _piecesToDespawn)
+            foreach(KeyValuePair<Piece, List<Piece>> pair in _piecesToDespawn)
             {
-                spawnPoints.Add(new Vector3(p.Key.transform.position.x, p.Key.transform.position.y + 5f, p.Key.transform.position.z));
-                Debug.Log("main: " + p.Key.transform.position + " matched: " + p.Value.Count);
-                // Determine if pattern is 4+ pieces
-                // Check in separate function this piece and all its matches for largest matched pattern
+                spawnPoints.Add(new Vector3(pair.Key.transform.position.x, pair.Key.transform.position.y + 5f, pair.Key.transform.position.z));
+                
 
-                // If one of the pieces matches last swapped, spawn special there
-                // If not, spawn randomly
-                seq.Join(p.Key.Despawn());
+                // Series of checks:
+                // is this piece maximum in it's pattern?
+                // are all pieces same count?
+                // what is the maximum count?
+                // is this piece swapped?
+
+                int maxCount = pair.Value.Count;
+                bool isMaxCount = true;
+                bool areAllSameCount = true;
+                bool isPieceSwapped = false;
+
+                if (pair.Key == gameManager._lastSwappedPieces[0] ||
+                    pair.Key == gameManager._lastSwappedPieces[1])
+                {
+                    isPieceSwapped = true;
+                }
+
+                foreach (Piece p in pair.Value)
+                {
+                    if (_piecesToDespawn[p].Count != maxCount)
+                    {
+                        areAllSameCount = false;
+                    }
+                    if (_piecesToDespawn[p].Count > maxCount)
+                    {
+                        maxCount = _piecesToDespawn[p].Count;
+                        isMaxCount = false;
+                    }
+                }
+
+                if (isMaxCount && !areAllSameCount)
+                {
+                    // ?????? If one of the pieces matches last swapped, spawn special there
+                    // ?????? If not, spawn randomly
+                    Debug.Log("max count piece is at: " + pair.Key.transform.position + ", count: " + pair.Value.Count);
+                }
+                if (areAllSameCount) { Debug.Log("all the same"); }
+
+                Debug.Log("main: " + pair.Key.transform.position + " matched: " + pair.Value.Count);
+
+
+
+                seq.Join(pair.Key.Despawn());
             }
 
             seq.OnComplete(() => { CleanUp(); gameManager.SetState(new SpawnState(gameManager, spawnPoints)); });
