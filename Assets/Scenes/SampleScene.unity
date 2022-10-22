@@ -461,12 +461,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <_piecesParent>k__BackingField: {fileID: 678683515}
   _spawnerSeed: pprppyrgbpbgbpryryrprgbgbgpgryrppyp
-  <_regularPieces>k__BackingField:
-  - {fileID: 5385432521648036387, guid: 4adf129a32d3493419cd269578e76b0b, type: 3}
-  - {fileID: 1106626270107597992, guid: 03e692ee52ebfd44481bcf934be38b73, type: 3}
-  - {fileID: 1488250429304100442, guid: 16dff4795b7863e47ae2aa347404f73a, type: 3}
-  - {fileID: 2901464556644184483, guid: 340fb3bb650774543abb69c2992792e1, type: 3}
-  - {fileID: 2178407730720813102, guid: 8eacd36256e23fe438a89fc3769d1b6d, type: 3}
+  _redPiece: {fileID: 2901464556644184483, guid: 340fb3bb650774543abb69c2992792e1, type: 3}
+  _bluePiece: {fileID: 5385432521648036387, guid: 4adf129a32d3493419cd269578e76b0b, type: 3}
+  _yellowPiece: {fileID: 2178407730720813102, guid: 8eacd36256e23fe438a89fc3769d1b6d, type: 3}
+  _purplePiece: {fileID: 1488250429304100442, guid: 16dff4795b7863e47ae2aa347404f73a, type: 3}
+  _greenPiece: {fileID: 1106626270107597992, guid: 03e692ee52ebfd44481bcf934be38b73, type: 3}
   _redPieceBomb: {fileID: 2901464556644184483, guid: ed4eb69c71f4fe54fba818ebbf37122b, type: 3}
   _bluePieceBomb: {fileID: 5385432521648036387, guid: 74b50a59d09b1f342a8ee850ab0973d4, type: 3}
   _yellowPieceBomb: {fileID: 2178407730720813102, guid: ff071450d8c54bf409947f0e0e0c6392, type: 3}
