@@ -23,7 +23,8 @@ namespace Match3NonPhys
         }
         public void ClickAction()
         {
-            SpecialMove();
+            //SpecialMove();
+            ToggleHighlight();
         }
     }
 }

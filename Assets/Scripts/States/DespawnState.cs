@@ -93,7 +93,7 @@ namespace Match3NonPhys
             Debug.Log("number of specials: " + specialPieces.Count + ", regulars: " + spawnPoints.Count);
 
 
-            seqRegular.OnComplete(() => { CleanUp(); gameManager.SetState(new SpawnState(gameManager, spawnPoints)); });
+            seqRegular.OnComplete(() => { CleanUp(); gameManager.SetState(new SpawnState(gameManager, spawnPoints, null, specialPieces)); });
         }
 
         #region Own methods
