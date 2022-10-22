@@ -41,8 +41,8 @@ namespace Match3NonPhys
 
         private GameObject SpawnPiece(Vector3 pos, Transform parent)
         {
-            int index = Random.Range(0, gameManager._pieces.GetLength(0));
-            GameObject obj = Object.Instantiate(gameManager._pieces[index], pos, Quaternion.identity, parent);
+            int index = Random.Range(0, gameManager._regularPieces.GetLength(0));
+            GameObject obj = Object.Instantiate(gameManager._regularPieces[index], pos, Quaternion.identity, parent);
 
             return obj;
         }
@@ -72,7 +72,7 @@ namespace Match3NonPhys
                     break;
             }
 
-            GameObject obj = Object.Instantiate(gameManager._pieces[index], pos, Quaternion.identity, parent);
+            GameObject obj = Object.Instantiate(gameManager._regularPieces[index], pos, Quaternion.identity, parent);
             return obj;
         }
         private Sequence MovePiecesDown()

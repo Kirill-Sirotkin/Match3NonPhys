@@ -17,13 +17,19 @@ namespace Match3NonPhys
         public Piece _selectedPiece { get; private set; } = null;
         public Piece[] _swappedPieces { get; private set; } = new Piece[2];
 
-        [field: SerializeField] private GameObject _redPiece;
-        [field: SerializeField] private GameObject _bluePiece;
-        [field: SerializeField] private GameObject _yellowPiece;
-        [field: SerializeField] private GameObject _purplePiece;
-        [field: SerializeField] private GameObject _greenPiece;
         [field: SerializeField] private string _spawnerSeed;
-        public GameObject[] _pieces { get; private set; }
+        [field: SerializeField] public GameObject[] _regularPieces { get; private set; }
+
+        [field: SerializeField] private GameObject _redPieceBomb;
+        [field: SerializeField] private GameObject _bluePieceBomb;
+        [field: SerializeField] private GameObject _yellowPieceBomb;
+        [field: SerializeField] private GameObject _purplePieceBomb;
+        [field: SerializeField] private GameObject _greenPieceBomb;
+        [field: SerializeField] private GameObject _redPieceLightning;
+        [field: SerializeField] private GameObject _bluePieceLightning;
+        [field: SerializeField] private GameObject _yellowPieceLightning;
+        [field: SerializeField] private GameObject _purplePieceLightning;
+        [field: SerializeField] private GameObject _greenPieceLightning;
         public bool _takeInput { get; set; }
         public Piece[] _lastSwappedPieces { get; set; } = new Piece[2];
 
@@ -31,7 +37,6 @@ namespace Match3NonPhys
 
         private void Start()
         {
-            _pieces = new GameObject[] { _redPiece, _bluePiece, _yellowPiece, _purplePiece, _greenPiece };
             SetState(new BeginState(this, _spawnerSeed));
         }
         private void Update()
