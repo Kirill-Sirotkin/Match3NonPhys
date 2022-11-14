@@ -14,6 +14,10 @@ namespace Match3NonPhys
         [field: SerializeField] protected GameObject _highlight;
         public bool _isIdle { get; protected set; } = true;
 
+        public void SetGameManager(GameManager m)
+        {
+            _manager = m;
+        }
         public Tween Move(Vector3 pos)
         {
             ActivatePieceAnimation();

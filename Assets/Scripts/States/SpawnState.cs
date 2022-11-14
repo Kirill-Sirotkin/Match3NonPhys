@@ -56,6 +56,7 @@ namespace Match3NonPhys
         {
             int index = Random.Range(0, gameManager._regularPieces.GetLength(0));
             GameObject obj = Object.Instantiate(gameManager._regularPieces[index], pos, Quaternion.identity, parent);
+            obj.GetComponent<Piece>().SetGameManager(gameManager);
 
             return obj;
         }
@@ -86,6 +87,7 @@ namespace Match3NonPhys
             }
 
             GameObject obj = Object.Instantiate(gameManager._regularPieces[index], pos, Quaternion.identity, parent);
+            obj.GetComponent<Piece>().SetGameManager(gameManager);
             return obj;
         }
         private GameObject SpawnSpecialPiece(Vector3 pos, Transform parent, KeyValuePair<Piece, int> pair)
@@ -135,6 +137,7 @@ namespace Match3NonPhys
             {
                 obj = Object.Instantiate(gameManager._lightningPieces[index], pos, Quaternion.identity, parent);
             }
+            obj.GetComponent<Piece>().SetGameManager(gameManager);
             return obj;
         }
         private Sequence MovePiecesDown()
