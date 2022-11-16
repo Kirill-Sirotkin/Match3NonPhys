@@ -79,13 +79,8 @@ namespace Match3NonPhys
                 }
             }
 
-            patternPieces.Add(piece);
-            if (patternPieces.Count < 3) { return; }
-
-            List<Piece> matches = new List<Piece>(patternPieces);
-            matches.RemoveAt(matches.Count - 1);
-
-            if (!_piecePatterns.ContainsKey(piece)) { _piecePatterns.Add(piece, matches); }
+            if (patternPieces.Count < 2) { return; }
+            if (!_piecePatterns.ContainsKey(piece)) { _piecePatterns.Add(piece, patternPieces); }
         }
 
         #endregion
