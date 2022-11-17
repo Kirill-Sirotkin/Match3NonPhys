@@ -46,6 +46,7 @@ namespace Match3NonPhys
 
             return obj;
         }
+
         private GameObject SpawnPiece(Vector3 pos, Transform parent, char pieceType)
         {
             int index;
@@ -75,6 +76,7 @@ namespace Match3NonPhys
             GameObject obj = Object.Instantiate(gameManager._pieces[index], pos, Quaternion.identity, parent);
             return obj;
         }
+
         private Sequence MovePiecesDown()
         {
             Sequence seq = DOTween.Sequence();

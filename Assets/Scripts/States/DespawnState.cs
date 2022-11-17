@@ -10,6 +10,7 @@ namespace Match3NonPhys
         public DespawnState(GameManager manager, Dictionary<Piece, List<Piece>> piecesToDespawn) : base(manager)
         {
             _piecesToDespawn = piecesToDespawn;
+            _differentiatedPatterns = new Dictionary<Piece, List<Piece>>();
         }
 
         public override void StartAction()
@@ -17,7 +18,19 @@ namespace Match3NonPhys
             Sequence seq = DOTween.Sequence();
             List<Vector3> spawnPoints = new List<Vector3>();
 
-            foreach(Piece p in _piecesToDespawn.Keys)
+            DifferentiatePatterns();
+
+            foreach (KeyValuePair<Piece, List<Piece>> pair in _differentiatedPatterns)
+            {
+                Debug.Log("most match for: " + pair.Key.transform.position + "; matches: " + pair.Value.Count);
+                foreach (Piece p in pair.Value)
+                {
+                    Debug.Log(p.transform.position);
+                }
+                Debug.Log("---------------");
+            }
+
+            foreach (Piece p in _piecesToDespawn.Keys)
             {
                 spawnPoints.Add(new Vector3(p.transform.position.x, p.transform.position.y + 5f, p.transform.position.z));
                 seq.Join(p.Despawn());
@@ -29,6 +42,7 @@ namespace Match3NonPhys
         #region Own methods
 
         Dictionary<Piece, List<Piece>> _piecesToDespawn;
+        Dictionary<Piece, List<Piece>> _differentiatedPatterns;
 
         private void CleanUp()
         {
@@ -36,6 +50,35 @@ namespace Match3NonPhys
             {
                 if (child.gameObject.activeSelf) { continue; }
                 Object.Destroy(child.gameObject);
+            }
+        }
+
+        private void DifferentiatePatterns()
+        {
+            List<Piece> addedPieces = new List<Piece>();
+
+            foreach (KeyValuePair<Piece, List<Piece>> pair in _piecesToDespawn)
+            {
+                if (addedPieces.Contains(pair.Key)) { continue; }
+
+                int baseMatchesCount = pair.Value.Count;
+                Piece mostMatchedPiece = pair.Key;
+
+                foreach (Piece p in pair.Value)
+                {
+                    int matchesCount = _piecesToDespawn[p].Count;
+
+                    if (matchesCount > baseMatchesCount)
+                    {
+                        baseMatchesCount = matchesCount;
+                        mostMatchedPiece = p;
+                    }
+                }
+
+                addedPieces.Add(mostMatchedPiece);
+                addedPieces.AddRange(_piecesToDespawn[mostMatchedPiece]);
+
+                _differentiatedPatterns.Add(mostMatchedPiece, _piecesToDespawn[mostMatchedPiece]);
             }
         }
 
