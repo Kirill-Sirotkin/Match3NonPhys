@@ -22,11 +22,22 @@ namespace Match3NonPhys
 
             foreach (KeyValuePair<Piece, List<Piece>> pair in _differentiatedPatterns)
             {
+                List<Piece> patternPiecesList = new List<Piece>();
+                patternPiecesList.Add(pair.Key);
+                patternPiecesList.AddRange(pair.Value);
+
                 Debug.Log("most match for: " + pair.Key.transform.position + "; matches: " + pair.Value.Count);
                 foreach (Piece p in pair.Value)
                 {
                     Debug.Log(p.transform.position);
                 }
+
+                if (pair.Value.Count > 2)
+                {
+                    Debug.Log("SPECIAL PATTERN");
+                }
+
+
                 Debug.Log("---------------");
             }
 
