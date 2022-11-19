@@ -19,6 +19,14 @@ namespace Match3NonPhys
             {
                 AssignPatterns(p);
             }
+            Debug.Log(_piecePatterns.Count);
+
+            foreach (Piece p in _piecePatterns.Keys)
+            {
+                Debug.Log(p.transform.position);
+            }
+
+            SeparatePatterns();
 
             if (_piecePatterns.Count == 0 && _lastSwappedPieces != null) 
             {
@@ -29,7 +37,7 @@ namespace Match3NonPhys
 
             if (_piecePatterns.Count > 0)
             {
-                gameManager.SetState(new DespawnState(gameManager, _piecePatterns));
+                gameManager.SetState(new DespawnState(gameManager, _piecePatterns, _separatePiecePatterns));
                 return;
             }
 
@@ -40,6 +48,7 @@ namespace Match3NonPhys
 
         Piece[] _lastSwappedPieces;
         Dictionary<Piece, List<Piece>> _piecePatterns = new Dictionary<Piece, List<Piece>>();
+        List<Dictionary<Piece, List<Piece>>> _separatePiecePatterns = new List<Dictionary<Piece, List<Piece>>>();
 
         private void AssignPatterns(Piece piece)
         {
@@ -81,6 +90,45 @@ namespace Match3NonPhys
 
             if (patternPieces.Count < 2) { return; }
             if (!_piecePatterns.ContainsKey(piece)) { _piecePatterns.Add(piece, patternPieces); }
+        }
+
+        private void SeparatePatterns()
+        {
+            List<Piece> uniquePiecesChecklist = new List<Piece>();
+            List<Piece> uniquePiecesIteration = new List<Piece>();
+            Dictionary<Piece, List<Piece>> uniquePatterns = new Dictionary<Piece, List<Piece>>();
+
+            foreach (KeyValuePair<Piece, List<Piece>> pair in _piecePatterns)
+            {
+                if (uniquePiecesChecklist.Contains(pair.Key)) { continue; }
+
+                int baseMatchesCount = pair.Value.Count;
+                Piece mostMatchedPiece = pair.Key;
+
+                foreach (Piece p in pair.Value)
+                {
+                    int matchesCount = _piecePatterns[p].Count;
+
+                    if (matchesCount > baseMatchesCount)
+                    {
+                        baseMatchesCount = matchesCount;
+                        mostMatchedPiece = p;
+                    }
+                }
+
+                uniquePiecesIteration.Clear();
+                uniquePiecesIteration.Add(mostMatchedPiece);
+                uniquePiecesIteration.AddRange(_piecePatterns[mostMatchedPiece]);
+
+                uniquePatterns.Clear();
+                foreach (Piece p in uniquePiecesIteration)
+                {
+                    uniquePatterns.Add(p, _piecePatterns[p]);
+                }
+
+                _separatePiecePatterns.Add(uniquePatterns);
+                uniquePiecesChecklist.AddRange(uniquePiecesIteration);
+            }
         }
 
         #endregion
