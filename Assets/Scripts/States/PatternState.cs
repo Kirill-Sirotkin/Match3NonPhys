@@ -19,12 +19,12 @@ namespace Match3NonPhys
             {
                 AssignPatterns(p);
             }
-            Debug.Log(_piecePatterns.Count);
+            //Debug.Log(_piecePatterns.Count);
 
-            foreach (Piece p in _piecePatterns.Keys)
-            {
-                Debug.Log(p.transform.position);
-            }
+            //foreach (Piece p in _piecePatterns.Keys)
+            //{
+            //    Debug.Log(p.transform.position);
+            //}
 
             SeparatePatterns();
 

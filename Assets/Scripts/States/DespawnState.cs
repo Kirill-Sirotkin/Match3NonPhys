@@ -23,28 +23,28 @@ namespace Match3NonPhys
                 _patterns.Add(new Pattern(dic));
             }
 
-            foreach (Pattern pat in _patterns)
-            {
-                Debug.Log("Uniqes in pat: " + pat._uniquePatternPieces.Count);
+            //foreach (Pattern pat in _patterns)
+            //{
+            //    Debug.Log("Uniqes in pat: " + pat._uniquePatternPieces.Count);
 
-                Debug.Log("------------");
-                foreach (Piece p in pat._uniquePatternPieces)
-                {
-                    Debug.Log("p: " + p.transform.position);
-                }
-                Debug.Log("------------");
+            //    Debug.Log("------------");
+            //    foreach (Piece p in pat._uniquePatternPieces)
+            //    {
+            //        Debug.Log("p: " + p.transform.position);
+            //    }
+            //    Debug.Log("------------");
 
-                Debug.Log("Individual matches in pat: " + pat._patternPiecesMatches.Count);
-                foreach (KeyValuePair<Piece, List<Piece>> pair in pat._patternPiecesMatches)
-                {
-                    Debug.Log("matches: " + (pair.Value.Count + 1));
-                    Debug.Log("main: " + pair.Key.transform.position);
-                    foreach (Piece p in pair.Value)
-                    {
-                        Debug.Log("coords: " + p.transform.position);
-                    }
-                }
-            }
+            //    Debug.Log("Individual matches in pat: " + pat._patternPiecesMatches.Count);
+            //    foreach (KeyValuePair<Piece, List<Piece>> pair in pat._patternPiecesMatches)
+            //    {
+            //        Debug.Log("matches: " + (pair.Value.Count + 1));
+            //        Debug.Log("main: " + pair.Key.transform.position);
+            //        foreach (Piece p in pair.Value)
+            //        {
+            //            Debug.Log("coords: " + p.transform.position);
+            //        }
+            //    }
+            //}
 
             for (int i = 0; i < _patterns.Count; i++)
             {
