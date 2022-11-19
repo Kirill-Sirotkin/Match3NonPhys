@@ -74,7 +74,10 @@ namespace Match3NonPhys
         private void MouseRay()
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            PassSelection(GetRayPiece(ray.origin, ray.direction).gameObject);
+            Piece selection = GetRayPiece(ray.origin, ray.direction);
+
+            if (selection == null) { return; }
+            PassSelection(selection.gameObject);
         }
         private void PassSelection(GameObject g)
         {
