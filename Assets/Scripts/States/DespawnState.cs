@@ -10,7 +10,7 @@ namespace Match3NonPhys
         public DespawnState(GameManager manager, Dictionary<Piece, List<Piece>> piecesToDespawn) : base(manager)
         {
             _piecesToDespawn = piecesToDespawn;
-            _differentiatedPatterns = new Dictionary<Piece, List<Piece>>();
+            _differentiatedPatterns = new List<List<Piece>>();
         }
 
         public override void StartAction()
@@ -19,24 +19,20 @@ namespace Match3NonPhys
             List<Vector3> spawnPoints = new List<Vector3>();
 
             DifferentiatePatterns();
+            Debug.Log("UNIQUE PATTERNS COUNT: " + _differentiatedPatterns.Count);
 
-            foreach (KeyValuePair<Piece, List<Piece>> pair in _differentiatedPatterns)
+            foreach (List<Piece> uniquePattern in _differentiatedPatterns)
             {
-                List<Piece> patternPiecesList = new List<Piece>();
-                patternPiecesList.Add(pair.Key);
-                patternPiecesList.AddRange(pair.Value);
-
-                Debug.Log("most match for: " + pair.Key.transform.position + "; matches: " + pair.Value.Count);
-                foreach (Piece p in pair.Value)
+                Debug.Log("PATTERN");
+                foreach (Piece p in uniquePattern)
                 {
-                    Debug.Log(p.transform.position);
+                    Debug.Log("coords: " + p.transform.position);
                 }
 
-                if (pair.Value.Count > 2)
+                if (uniquePattern.Count > 3)
                 {
                     Debug.Log("SPECIAL PATTERN");
                 }
-
 
                 Debug.Log("---------------");
             }
@@ -53,7 +49,7 @@ namespace Match3NonPhys
         #region Own methods
 
         Dictionary<Piece, List<Piece>> _piecesToDespawn;
-        Dictionary<Piece, List<Piece>> _differentiatedPatterns;
+        List<List<Piece>> _differentiatedPatterns;
 
         private void CleanUp()
         {
@@ -67,6 +63,7 @@ namespace Match3NonPhys
         private void DifferentiatePatterns()
         {
             List<Piece> addedPieces = new List<Piece>();
+            Dictionary<Piece, List<Piece>> uniquePatterns = new Dictionary<Piece, List<Piece>>();
 
             foreach (KeyValuePair<Piece, List<Piece>> pair in _piecesToDespawn)
             {
@@ -89,7 +86,16 @@ namespace Match3NonPhys
                 addedPieces.Add(mostMatchedPiece);
                 addedPieces.AddRange(_piecesToDespawn[mostMatchedPiece]);
 
-                _differentiatedPatterns.Add(mostMatchedPiece, _piecesToDespawn[mostMatchedPiece]);
+                uniquePatterns.Add(mostMatchedPiece, _piecesToDespawn[mostMatchedPiece]);
+            }
+
+            foreach (KeyValuePair<Piece, List<Piece>> pair in uniquePatterns)
+            {
+                List<Piece> patternList = new List<Piece>();
+                patternList.Add(pair.Key);
+                patternList.AddRange(pair.Value);
+
+                _differentiatedPatterns.Add(patternList);
             }
         }
 
