@@ -26,37 +26,30 @@ namespace Match3NonPhys
                 if (patternPieces.Count > 3)
                 {
                     Piece specialPiece = GetSpecialPiecePosition(patternPieces);
-
-                    //Debug.Log("Special pattern: " + patternPieces.Count);
-                    //Debug.Log("Position for piece: " + specialPiece.transform.position);
-
                     specialPiecesSpawnPoints.Add(specialPiece, patternPieces.Count);
                     patternPieces.Remove(specialPiece);
                 }
 
                 piecesToDespawn.AddRange(patternPieces);
             }
+
             foreach(Piece p in piecesToDespawn)
             {
                 spawnPoints.Add(new Vector3(p.transform.position.x, p.transform.position.y + 5f, p.transform.position.z));
                 seq.Join(p.Despawn());
             }
+            foreach(Piece p in specialPiecesSpawnPoints.Keys)
+            {
+                seq.Join(p.Despawn());
+            }
 
-            seq.OnComplete(() => { CleanUp(); gameManager.SetState(new SpawnState(gameManager, spawnPoints, specialPiecesSpawnPoints)); });
+            seq.OnComplete(() => { gameManager.SetState(new SpawnState(gameManager, spawnPoints, specialPiecesSpawnPoints)); });
         }
 
         #region Own methods
 
         List<Pattern> _patterns;
 
-        private void CleanUp()
-        {
-            foreach (Transform child in gameManager._piecesParent)
-            {
-                if (child.gameObject.activeSelf) { continue; }
-                Object.Destroy(child.gameObject);
-            }
-        }
         private Piece SwappedPieceInPattern(List<Piece> pieces)
         {
             if (gameManager._lastSwappedPieces == null)

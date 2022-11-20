@@ -16,32 +16,15 @@ namespace Match3NonPhys
 
         public override void StartAction()
         {
-            //TEST
-
-            Debug.Log("Regular pieces: ");
-            foreach(Vector3 v in _spawnPoints)
-            {
-                Debug.Log(v);
-            }
-            Debug.Log("----------");
-            Debug.Log("Special pieces: ");
-            if (_specialPieceSpawnPoints != null)
-            {
-                foreach(KeyValuePair<Piece, int> pair in _specialPieceSpawnPoints)
-                {
-                    Debug.Log("spec: " + pair.Value + " " + pair.Key._type + " at: " + pair.Key.transform.position);
-                }
-            }
-            Debug.Log("----------");
-
-            //TEST END
-
-
             if (_seed == null)
             {
                 foreach (Vector3 v in _spawnPoints)
                 {
                     SpawnPiece(v, gameManager._piecesParent);
+                }
+                foreach (KeyValuePair<Piece, int> pair in _specialPieceSpawnPoints)
+                {
+                    SpawnPiece(pair.Key.transform.position, gameManager._piecesParent, pair.Key._type, pair.Value);
                 }
             }
             else
@@ -60,7 +43,7 @@ namespace Match3NonPhys
                 gameManager._lastSwappedPieces[1] = null;
             }
 
-            seq.OnComplete(() => { gameManager.SetState(new PatternState(gameManager)); });
+            seq.OnComplete(() => { CleanUp(); gameManager.SetState(new PatternState(gameManager)); });
         }
 
         #region Own methods
@@ -69,6 +52,14 @@ namespace Match3NonPhys
         private Dictionary<Piece, int> _specialPieceSpawnPoints;
         private string _seed;
 
+        private void CleanUp()
+        {
+            foreach (Transform child in gameManager._piecesParent)
+            {
+                if (child.gameObject.activeSelf) { continue; }
+                Object.Destroy(child.gameObject);
+            }
+        }
         private GameObject SpawnPiece(Vector3 pos, Transform parent)
         {
             int index = Random.Range(0, gameManager._pieces.GetLength(0));
@@ -98,11 +89,50 @@ namespace Match3NonPhys
                     break;
                 default:
                     index = 0;
-                    Debug.Log("Uknown piece signature in seed. Spawning default piece");
+                    Debug.Log("Unknown piece signature in seed. Spawning default piece");
                     break;
             }
 
             GameObject obj = Object.Instantiate(gameManager._pieces[index], pos, Quaternion.identity, parent);
+            return obj;
+        }
+        private GameObject SpawnPiece(Vector3 pos, Transform parent, PieceType pieceType, int specialType)
+        {
+            int pieceTypeIndex;
+            switch (pieceType)
+            {
+                case PieceType.Red:
+                    pieceTypeIndex = 0;
+                    break;
+                case PieceType.Blue:
+                    pieceTypeIndex = 1;
+                    break;
+                case PieceType.Yellow:
+                    pieceTypeIndex = 2;
+                    break;
+                case PieceType.Purple:
+                    pieceTypeIndex = 3;
+                    break;
+                case PieceType.Green:
+                    pieceTypeIndex = 4;
+                    break;
+                default:
+                    pieceTypeIndex = 0;
+                    Debug.Log("Unknown piece type. Spawning default piece");
+                    break;
+            }
+
+            int specialTypeIndex;
+            if (specialType >= 5)
+            {
+                specialTypeIndex = 1;
+            }
+            else
+            {
+                specialTypeIndex = 0;
+            }
+
+            GameObject obj = Object.Instantiate(gameManager._specialPieces[specialTypeIndex, pieceTypeIndex], pos, Quaternion.identity, parent);
             return obj;
         }
         private Sequence MovePiecesDown()
