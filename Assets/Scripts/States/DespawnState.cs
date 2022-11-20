@@ -7,17 +7,22 @@ namespace Match3NonPhys
 {
     public class DespawnState : State
     {
-        public DespawnState(GameManager manager, Dictionary<Piece, List<Piece>> piecesToDespawn) : base(manager)
+        public DespawnState(GameManager manager, List<Pattern> patterns) : base(manager)
         {
-            _piecesToDespawn = piecesToDespawn;
+            _patterns = patterns;
         }
 
         public override void StartAction()
         {
             Sequence seq = DOTween.Sequence();
             List<Vector3> spawnPoints = new List<Vector3>();
+            List<Piece> piecesToDespawn = new List<Piece>();
 
-            foreach(Piece p in _piecesToDespawn.Keys)
+            foreach(Pattern pat in _patterns)
+            {
+                piecesToDespawn.AddRange(pat._piecesInPattern);
+            }
+            foreach(Piece p in piecesToDespawn)
             {
                 spawnPoints.Add(new Vector3(p.transform.position.x, p.transform.position.y + 5f, p.transform.position.z));
                 seq.Join(p.Despawn());
@@ -28,7 +33,7 @@ namespace Match3NonPhys
 
         #region Own methods
 
-        Dictionary<Piece, List<Piece>> _piecesToDespawn;
+        List<Pattern> _patterns;
 
         private void CleanUp()
         {

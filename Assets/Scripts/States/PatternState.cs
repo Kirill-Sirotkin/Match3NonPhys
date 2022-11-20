@@ -37,7 +37,7 @@ namespace Match3NonPhys
 
             if (_piecePatterns.Count > 0)
             {
-                gameManager.SetState(new DespawnState(gameManager, _piecePatterns));
+                gameManager.SetState(new DespawnState(gameManager, patterns));
                 return;
             }
 
