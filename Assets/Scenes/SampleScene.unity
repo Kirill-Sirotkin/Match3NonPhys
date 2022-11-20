@@ -475,4 +475,4 @@ MonoBehaviour:
   _yellowLightningPiece: {fileID: 2178407730720813102, guid: 1af7062f0eac93b42b0d189356b10cd6, type: 3}
   _purpleLightningPiece: {fileID: 1488250429304100442, guid: a091f283eca850a4ca1a2c23125e0c6c, type: 3}
   _greenLightningPiece: {fileID: 1106626270107597992, guid: 1ac77d19cf023b543a4662cd074c2399, type: 3}
-  _spawnerSeed: pprppyrgbpbgbpryryrpryrgbgpgryrppyp
+  _spawnerSeed: rpppryrbpppbgbrpppryrbgbgbgbryryryr
