@@ -21,6 +21,11 @@ namespace Match3NonPhys
             foreach(Pattern pat in _patterns)
             {
                 piecesToDespawn.AddRange(pat._piecesInPattern);
+                if (pat._piecesInPattern.Count > 3)
+                {
+                    Debug.Log("Special pattern: " + pat._piecesInPattern.Count);
+                    Debug.Log("Position for piece: " + GetSpecialPiecePosition(pat._piecesInPattern));
+                }
             }
             foreach(Piece p in piecesToDespawn)
             {
@@ -42,6 +47,41 @@ namespace Match3NonPhys
                 if (child.gameObject.activeSelf) { continue; }
                 Object.Destroy(child.gameObject);
             }
+        }
+        private Piece SwappedPieceInPattern(List<Piece> pieces)
+        {
+            if (gameManager._lastSwappedPieces == null)
+            {
+                return null;
+            }
+
+            if (gameManager._lastSwappedPieces[0] == null ||
+                gameManager._lastSwappedPieces[1] == null)
+            {
+                return null;
+            }
+
+            foreach(Piece p in pieces)
+            {
+                if (p.transform.position == gameManager._lastSwappedPieces[0].transform.position ||
+                    p.transform.position == gameManager._lastSwappedPieces[1].transform.position)
+                {
+                    return p;
+                }
+            }
+
+            return null;
+        }
+        private Vector3 GetSpecialPiecePosition(List<Piece> pieces)
+        {
+            Piece swappedPiece = SwappedPieceInPattern(pieces);
+
+            if (swappedPiece == null)
+            {
+                return pieces[Random.Range(0, pieces.Count)].transform.position;
+            }
+
+            return swappedPiece.transform.position;
         }
 
         #endregion

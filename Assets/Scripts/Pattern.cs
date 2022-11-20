@@ -28,8 +28,6 @@ namespace Match3NonPhys
 
             for (int i = 0; i < patterns.Count - 1; i++)
             {
-                //if (i + 1 >= patterns.Count) { break; }
-
                 for (int j = i + 1; j < patterns.Count; j++)
                 {
                     if (IsPatternOverlap(patterns[i], patterns[j]))
