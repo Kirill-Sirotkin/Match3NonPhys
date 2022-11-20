@@ -32,8 +32,11 @@ namespace Match3NonPhys
 
             Sequence seq = MovePiecesDown();
 
-            gameManager._lastSwappedPieces[0] = null;
-            gameManager._lastSwappedPieces[1] = null;
+            if (gameManager._lastSwappedPieces != null)
+            {
+                gameManager._lastSwappedPieces[0] = null;
+                gameManager._lastSwappedPieces[1] = null;
+            }
 
             seq.OnComplete(() => { gameManager.SetState(new PatternState(gameManager)); });
         }
