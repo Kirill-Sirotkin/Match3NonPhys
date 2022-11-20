@@ -16,16 +16,25 @@ namespace Match3NonPhys
         {
             Sequence seq = DOTween.Sequence();
             List<Vector3> spawnPoints = new List<Vector3>();
+            Dictionary<Piece, int> specialPiecesSpawnPoints = new Dictionary<Piece, int>();
             List<Piece> piecesToDespawn = new List<Piece>();
 
             foreach(Pattern pat in _patterns)
             {
-                piecesToDespawn.AddRange(pat._piecesInPattern);
-                if (pat._piecesInPattern.Count > 3)
+                List<Piece> patternPieces = new List<Piece>(pat._piecesInPattern);
+
+                if (patternPieces.Count > 3)
                 {
-                    Debug.Log("Special pattern: " + pat._piecesInPattern.Count);
-                    Debug.Log("Position for piece: " + GetSpecialPiecePosition(pat._piecesInPattern));
+                    Piece specialPiece = GetSpecialPiecePosition(patternPieces);
+
+                    //Debug.Log("Special pattern: " + patternPieces.Count);
+                    //Debug.Log("Position for piece: " + specialPiece.transform.position);
+
+                    specialPiecesSpawnPoints.Add(specialPiece, patternPieces.Count);
+                    patternPieces.Remove(specialPiece);
                 }
+
+                piecesToDespawn.AddRange(patternPieces);
             }
             foreach(Piece p in piecesToDespawn)
             {
@@ -33,7 +42,7 @@ namespace Match3NonPhys
                 seq.Join(p.Despawn());
             }
 
-            seq.OnComplete(() => { CleanUp(); gameManager.SetState(new SpawnState(gameManager, spawnPoints)); });
+            seq.OnComplete(() => { CleanUp(); gameManager.SetState(new SpawnState(gameManager, spawnPoints, specialPiecesSpawnPoints)); });
         }
 
         #region Own methods
@@ -72,16 +81,16 @@ namespace Match3NonPhys
 
             return null;
         }
-        private Vector3 GetSpecialPiecePosition(List<Piece> pieces)
+        private Piece GetSpecialPiecePosition(List<Piece> pieces)
         {
             Piece swappedPiece = SwappedPieceInPattern(pieces);
 
             if (swappedPiece == null)
             {
-                return pieces[Random.Range(0, pieces.Count)].transform.position;
+                return pieces[Random.Range(0, pieces.Count)];
             }
 
-            return swappedPiece.transform.position;
+            return swappedPiece;
         }
 
         #endregion

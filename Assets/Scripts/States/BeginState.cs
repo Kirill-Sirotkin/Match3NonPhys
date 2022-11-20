@@ -25,7 +25,7 @@ namespace Match3NonPhys
             }
 
             if (!IsSeedCorrect()) { gameManager.SetState(new SpawnState(gameManager, spawnPoints)); return; }
-            gameManager.SetState(new SpawnState(gameManager, spawnPoints, _seed));
+            gameManager.SetState(new SpawnState(gameManager, spawnPoints, null, _seed));
         }
 
         #region Own methods

@@ -7,14 +7,36 @@ namespace Match3NonPhys
 {
     public class SpawnState : State
     {
-        public SpawnState(GameManager manager, List<Vector3> spawnPoints, string seed = null) : base(manager)
+        public SpawnState(GameManager manager, List<Vector3> spawnPoints, Dictionary<Piece, int> specialSpawns = null, string seed = null) : base(manager)
         {
             _spawnPoints = new List<Vector3>(spawnPoints);
+            _specialPieceSpawnPoints = specialSpawns;
             _seed = seed;
         }
 
         public override void StartAction()
         {
+            //TEST
+
+            Debug.Log("Regular pieces: ");
+            foreach(Vector3 v in _spawnPoints)
+            {
+                Debug.Log(v);
+            }
+            Debug.Log("----------");
+            Debug.Log("Special pieces: ");
+            if (_specialPieceSpawnPoints != null)
+            {
+                foreach(KeyValuePair<Piece, int> pair in _specialPieceSpawnPoints)
+                {
+                    Debug.Log("spec: " + pair.Value + " " + pair.Key._type + " at: " + pair.Key.transform.position);
+                }
+            }
+            Debug.Log("----------");
+
+            //TEST END
+
+
             if (_seed == null)
             {
                 foreach (Vector3 v in _spawnPoints)
@@ -44,6 +66,7 @@ namespace Match3NonPhys
         #region Own methods
 
         private List<Vector3> _spawnPoints;
+        private Dictionary<Piece, int> _specialPieceSpawnPoints;
         private string _seed;
 
         private GameObject SpawnPiece(Vector3 pos, Transform parent)
