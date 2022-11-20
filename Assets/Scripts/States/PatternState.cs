@@ -20,6 +20,37 @@ namespace Match3NonPhys
                 AssignPatterns(p);
             }
 
+            // TESTING
+
+            Debug.Log("total pieces to despawn: " + _piecePatterns.Count);
+            foreach (KeyValuePair<Piece, List<Piece>> pair in _piecePatterns)
+            {
+                //Debug.Log("ID: " + pair.Key.GetInstanceID());
+                //Debug.Log("coords: " + pair.Key.transform.position);
+            }
+
+
+            List<Pattern> patterns = new List<Pattern>();
+            foreach(KeyValuePair<Piece,List<Piece>> pair in _piecePatterns)
+            {
+                patterns.Add(new Pattern(pair));
+            }
+            Debug.Log("total raw patterns converted: " + patterns.Count);
+
+            patterns = Pattern.MergePatternsList(patterns, 0);
+            Debug.Log("total merged patterns converted: " + patterns.Count);
+
+            foreach(Pattern pat in patterns)
+            {
+                foreach(Piece p in pat._piecesInPattern)
+                {
+                    Debug.Log("Piece: " + p.transform.position);
+                }
+                Debug.Log("----------------");
+            }
+
+            // TESTING END
+
             if (_piecePatterns.Count == 0 && _lastSwappedPieces != null) 
             {
                 seq = gameManager.SwapPieces(_lastSwappedPieces[0], _lastSwappedPieces[1]);
