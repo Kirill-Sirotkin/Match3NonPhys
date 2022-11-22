@@ -189,12 +189,12 @@ Light:
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 2
+    m_Type: 1
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
-    m_Bias: 0.05
-    m_NormalBias: 0.4
+    m_Bias: 0
+    m_NormalBias: 0
     m_NearPlane: 0.2
     m_CullingMatrixOverride:
       e00: 1
@@ -469,7 +469,7 @@ MonoBehaviour:
   _blueBombPiece: {fileID: 5385432521648036387, guid: 339f042fa88b1d7499e9f6245e1eca6c, type: 3}
   _yellowBombPiece: {fileID: 2178407730720813102, guid: a40f31032d5913e4e83bd0b1c1e3b0a7, type: 3}
   _purpleBombPiece: {fileID: 1488250429304100442, guid: dfff4102730915341b0f03ab1e170097, type: 3}
-  _greenBombPiece: {fileID: 5385432521648036387, guid: 339f042fa88b1d7499e9f6245e1eca6c, type: 3}
+  _greenBombPiece: {fileID: 1106626270107597992, guid: ce5636640b7d67249a04c0a54045a459, type: 3}
   _redLightningPiece: {fileID: 2901464556644184483, guid: ff0f7c246ffd892449d791bd924a387c, type: 3}
   _blueLightningPiece: {fileID: 5385432521648036387, guid: 8b2b0074393e303428d21da97ce0f91b, type: 3}
   _yellowLightningPiece: {fileID: 2178407730720813102, guid: 1af7062f0eac93b42b0d189356b10cd6, type: 3}

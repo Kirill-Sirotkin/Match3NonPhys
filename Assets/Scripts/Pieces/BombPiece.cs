@@ -5,15 +5,11 @@ using DG.Tweening;
 
 namespace Match3NonPhys
 {
-    public class BombPiece : Piece, IClickable, ISpecialPiece
+    public class BombPiece : Piece, ISpecialPiece
     {
         public void SetGameManager(GameManager gm)
         {
             _gameManager = gm;
-        }
-        public new void ClickAction()
-        {
-            SpecialMoveAnimation();
         }
         public Sequence SpecialMoveAnimation()
         {
