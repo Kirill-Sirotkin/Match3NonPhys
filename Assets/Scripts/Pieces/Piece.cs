@@ -9,9 +9,9 @@ namespace Match3NonPhys
     public class Piece : MonoBehaviour, IClickable
     {
         [field: SerializeField] public PieceType _type { get; private set; }
-        [field: SerializeField] private GameObject _highlight;
-        [field: SerializeField] private GameObject _visual;
-        public bool _isIdle { get; private set; } = true;
+        [field: SerializeField] protected GameObject _highlight;
+        [field: SerializeField] protected GameObject _visual;
+        public bool _isIdle { get; protected set; } = true;
 
         public Tween Move(Vector3 pos)
         {

@@ -24,7 +24,16 @@ namespace Match3NonPhys
                 }
                 foreach (KeyValuePair<Piece, int> pair in _specialPieceSpawnPoints)
                 {
-                    SpawnPiece(pair.Key.transform.position, gameManager._piecesParent, pair.Key._type, pair.Value);
+                    GameObject g = SpawnPiece(pair.Key.transform.position, gameManager._piecesParent, pair.Key._type, pair.Value);
+                    ISpecialPiece specialPiece = g.GetComponent<ISpecialPiece>();
+
+                    if (specialPiece == null)
+                    {
+                        Debug.Log("Special Piece has no interface");
+                        continue;
+                    }
+
+                    specialPiece.SetGameManager(gameManager);
                 }
             }
             else
