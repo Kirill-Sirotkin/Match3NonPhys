@@ -12,6 +12,7 @@ namespace Match3NonPhys
         [field: SerializeField] protected GameObject _highlight;
         [field: SerializeField] protected GameObject _visual;
         public bool _isIdle { get; protected set; } = true;
+        protected GameManager _gameManager = null;
 
         public Tween Move(Vector3 pos)
         {
@@ -29,6 +30,37 @@ namespace Match3NonPhys
         {
             ActivatePieceAnimation();
             return _visual.transform.DOScale(Vector3.zero, 0.35f).SetEase(Ease.InBack)
+                .OnComplete(() => { _isIdle = true; });
+        }
+        public Tween Twist()
+        {
+            ActivatePieceAnimation();
+            return _visual.transform.DORotate(new Vector3(0f, 0f, 360f), 0.25f, RotateMode.FastBeyond360)
+                .OnComplete(() => { _isIdle = true; });
+        }
+        public Sequence ScaleAnimation(float horizontalScale, float verticalScale)
+        {
+            ActivatePieceAnimation();
+
+            Sequence seq = DOTween.Sequence();
+
+            Vector3 startScale = transform.localScale;
+
+            seq.Join(_visual.transform.DOScale(
+                new Vector3(
+                    transform.localScale.x * horizontalScale,
+                    transform.localScale.y * verticalScale,
+                    transform.localScale.z),
+                0.125f));
+
+            seq.Append(_visual.transform.DOScale(
+                new Vector3(
+                    startScale.x,
+                    startScale.y,
+                    startScale.z),
+                0.125f));
+
+            return seq
                 .OnComplete(() => { _isIdle = true; });
         }
         public Sequence Despawn()
