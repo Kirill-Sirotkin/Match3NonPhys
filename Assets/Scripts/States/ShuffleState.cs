@@ -17,10 +17,12 @@ namespace Match3NonPhys
 
             foreach (Piece p in gameManager._piecesParent.GetComponentsInChildren<Piece>())
             {
+                ISpecialPiece special = p.GetComponent<ISpecialPiece>();
                 if (CheckForAvailableMoves(p.transform.position, _pattern1) ||
                     CheckForAvailableMoves(p.transform.position, _pattern2) ||
                     CheckForAvailableMoves(p.transform.position, _pattern3) ||
-                    CheckForAvailableMoves(p.transform.position, _pattern4))
+                    CheckForAvailableMoves(p.transform.position, _pattern4) ||
+                    special != null)
                 {
                     movesExist = true;
                     break;
