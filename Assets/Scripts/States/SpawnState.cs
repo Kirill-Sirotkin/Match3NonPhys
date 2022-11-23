@@ -51,6 +51,7 @@ namespace Match3NonPhys
                 gameManager._lastSwappedPieces[0] = null;
                 gameManager._lastSwappedPieces[1] = null;
             }
+            gameManager._patterns.Clear();
 
             seq.OnComplete(() => { CleanUp(); gameManager.SetState(new PatternState(gameManager)); });
         }

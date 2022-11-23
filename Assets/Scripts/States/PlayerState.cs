@@ -14,10 +14,22 @@ namespace Match3NonPhys
         {
             gameManager._takeInput = true;
         }
-        public override void SwitchState()
+        public override void SwitchState(int stateIndex)
         {
             gameManager._takeInput = false;
-            gameManager.SetState(new PatternState(gameManager, gameManager._lastSwappedPieces));
+
+            switch (stateIndex)
+            {
+                case 0:
+                    gameManager.SetState(new PatternState(gameManager, gameManager._lastSwappedPieces));
+                    break;
+                case 1:
+                    gameManager.SetState(new DespawnState(gameManager, gameManager._patterns));
+                    break;
+                default:
+                    Debug.Log("Unknown state index");
+                    break;
+            }
         }
     }
 }

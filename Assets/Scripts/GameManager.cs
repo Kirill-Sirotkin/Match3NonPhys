@@ -41,6 +41,7 @@ namespace Match3NonPhys
         public GameObject[,] _specialPieces { get; private set; }
         public bool _takeInput { get; set; }
         public Piece[] _lastSwappedPieces { get; set; } = new Piece[2];
+        public List<Pattern> _patterns { get; set; } = new List<Pattern>();
 
         #region Start & Update
 
@@ -56,7 +57,7 @@ namespace Match3NonPhys
         private void Update()
         {
             if (!_takeInput) { return; }
-            if (Input.GetMouseButtonDown(0)) { /*Debug.Log("LMB pressed");*/ MouseRay(); }
+            if (Input.GetMouseButtonDown(0)) { MouseRay(); }
         }
 
         #endregion
@@ -117,6 +118,19 @@ namespace Match3NonPhys
 
             if (_selectedPiece == null)
             {
+                ISpecialPiece special = piece.GetComponent<ISpecialPiece>();
+                if (special != null)
+                {
+                    List<Piece> pieces = special.SpecialMovePieces();
+                    foreach(Piece p in pieces)
+                    {
+                        _patterns.Add(new Pattern(p));
+                    }
+                    _patterns.Add(new Pattern(piece));
+
+                    _state.SwitchState(1);
+                }
+
                 _selectedPiece = piece;
                 return;
             }
@@ -146,7 +160,7 @@ namespace Match3NonPhys
             _lastSwappedPieces[0] = piece;
             _lastSwappedPieces[1] = _selectedPiece;
             seq = SwapPieces(piece, _selectedPiece);
-            seq.OnComplete(() => { _state.SwitchState(); });
+            seq.OnComplete(() => { _state.SwitchState(0); });
             _selectedPiece = null;
         }
 

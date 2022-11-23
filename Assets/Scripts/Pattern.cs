@@ -13,6 +13,11 @@ namespace Match3NonPhys
         {
             _piecesInPattern = pattern;
         }
+        public Pattern(Piece piece)
+        {
+            _piecesInPattern = new List<Piece>();
+            _piecesInPattern.Add(piece);
+        }
         public Pattern(KeyValuePair<Piece,List<Piece>> pattern)
         {
             _piecesInPattern = new List<Piece>();
