@@ -67,13 +67,22 @@ namespace Match3NonPhys
             seq.Append(specialSeq);
             seq.Append(regularSeq);
 
-            seq.OnComplete(() => { gameManager.SetState(new SpawnState(gameManager, spawnPoints, specialPiecesSpawnPoints)); });
+            seq.OnComplete(() => 
+            {
+                UpdateScore(spawnPoints.Count, specialPiecesSpawnPoints.Count);
+                gameManager.SetState(new SpawnState(gameManager, spawnPoints, specialPiecesSpawnPoints)); 
+            });
         }
 
         #region Own methods
 
         List<Pattern> _patterns;
 
+        private void UpdateScore(int regulars, int specials)
+        {
+            int score = regulars * 50 + specials * 75;
+            gameManager.AddScore(score);
+        }
         private Piece SwappedPieceInPattern(List<Piece> pieces)
         {
             if (gameManager._lastSwappedPieces == null)

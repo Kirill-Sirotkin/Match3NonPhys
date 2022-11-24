@@ -4,12 +4,15 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using TMPro;
 
 namespace Match3NonPhys
 {
     public class GameManager : StateManager
     {
         [field: SerializeField] public Transform _piecesParent { get; private set; }
+        [field: SerializeField] public TMP_Text _scoreNumUI { get; private set; }
+        private int _scoreNum = 0;
 
         private delegate void ActionOnSelectionDelegate(GameObject g);
         private ActionOnSelectionDelegate ActionOnSelection;
@@ -64,6 +67,11 @@ namespace Match3NonPhys
 
         #region Public methods
 
+        public void AddScore(int score)
+        {
+            _scoreNum += score;
+            _scoreNumUI.text = _scoreNum.ToString();
+        }
         public Sequence SwapPieces(Piece piece1, Piece piece2)
         {
             Sequence seq = DOTween.Sequence();
