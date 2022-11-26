@@ -13,6 +13,7 @@ namespace Match3NonPhys
 
         public override void StartAction()
         {
+            List<PatternMold> patternMolds = GeneratePatternMolds();
             bool movesExist = false;
 
             foreach (Piece p in gameManager._piecesParent.GetComponentsInChildren<Piece>())
@@ -40,6 +41,44 @@ namespace Match3NonPhys
         private List<Vector3> _pattern2 = new List<Vector3> { new Vector3(1f, 0f, 0f), new Vector3(3f, 0f, 0f) };
         private List<Vector3> _pattern3 = new List<Vector3> { new Vector3(1f, 0f, 0f), new Vector3(2f, 1f, 0f) };
         private List<Vector3> _pattern4 = new List<Vector3> { new Vector3(1f, 0f, 0f), new Vector3(2f, -1f, 0f) };
+
+        private List<PatternMold> GeneratePatternMolds()
+        {
+            List<PatternMold> patternMolds = new List<PatternMold>();
+
+            patternMolds.Add(new PatternMold(new Vector3[] { new Vector3(1f, 1f, 0f), new Vector3(2f, 0f, 0f) }));
+            patternMolds.Add(new PatternMold(new Vector3[] { new Vector3(1f, 0f, 0f), new Vector3(3f, 0f, 0f) }));
+            patternMolds.Add(new PatternMold(new Vector3[] { new Vector3(1f, 0f, 0f), new Vector3(2f, 1f, 0f) }));
+
+            return patternMolds;
+        }
+        private bool IsMovesInPatternMold(Piece originalPiece, PatternMold patternMold)
+        {
+            PieceType originalPieceType = originalPiece._type;
+            Vector3 rayStart = new Vector3(0f, 0f, -1.5f);
+
+            foreach (List<Vector3> mold in patternMold._molds)
+            {
+                bool isPiecesMatch = true;
+                foreach (Vector3 coordinate in mold)
+                {
+                    if (gameManager.GetRayPiece(
+                        originalPiece.transform.position + coordinate + rayStart, 
+                        Vector3.forward)
+                        ._type != originalPieceType)
+                    {
+                        isPiecesMatch = false;
+                    }
+                }
+
+                if (isPiecesMatch)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
 
         private bool CheckForAvailableMoves(Vector3 pos, List<Vector3> pattern)
         {
