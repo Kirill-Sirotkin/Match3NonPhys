@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+// Additional
 using DG.Tweening;
-using System;
 
 namespace Match3NonPhys
 {
@@ -105,6 +106,14 @@ namespace Match3NonPhys
         Blue,
         Yellow,
         Green,
-        Purple
+        Purple,
+        Random
+    }
+
+    public enum PieceSpecialType
+    {
+        Regular,
+        Bomb,
+        Lightning
     }
 }
