@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Match3NonPhys
 {
-    public class SpawnPoint : MonoBehaviour
+    public class SpawnPoint
     {
         public Vector3 _coords { get; private set; }
         public PieceSpecialType _specialType { get; private set; }

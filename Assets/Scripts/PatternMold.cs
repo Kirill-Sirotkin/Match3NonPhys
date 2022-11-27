@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Match3NonPhys
 {
-    public class PatternMold : MonoBehaviour
+    public class PatternMold
     {
         public List<List<Vector3>> _molds { get; private set; }
         private List<Vector3> _patternCoords;
