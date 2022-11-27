@@ -64,6 +64,39 @@ namespace Match3NonPhys
                 spawnPoints.Add(new Vector3(p.transform.position.x, p.transform.position.y + 5f, p.transform.position.z));
             }
 
+
+
+            List<SpawnPoint> spawnPoints1 = new List<SpawnPoint>();
+
+            foreach (Pattern pattern in _patterns)
+            {
+                List<Piece> patternPieces = new List<Piece>(pattern._piecesInPattern);
+
+                if (patternPieces.Count > 3)
+                {
+                    Piece specialPiece = GetSpecialPiecePosition(patternPieces);
+                    spawnPoints1.Add(new SpawnPoint(specialPiece.transform.position, patternPieces.Count, specialPiece._type));
+                    patternPieces.Remove(specialPiece);
+                }
+
+                foreach(Piece piece in patternPieces)
+                {
+                    spawnPoints1.Add(new SpawnPoint(new Vector3(
+                        piece.transform.position.x,
+                        piece.transform.position.y + 5,
+                        piece.transform.position.z)));
+                }
+            }
+
+            List<Piece> pieces = Pattern.GetPiecesFromPatterns(_patterns);
+
+            foreach (Piece piece in pieces)
+            {
+                seq.Join(piece.Despawn());
+            }
+
+
+
             seq.Append(specialSeq);
             seq.Append(regularSeq);
 
