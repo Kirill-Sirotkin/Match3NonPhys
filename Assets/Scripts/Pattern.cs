@@ -105,16 +105,5 @@ namespace Match3NonPhys
 
             return nonOverlappingPieces;
         }
-        public static List<Piece> GetPiecesFromPatterns(List<Pattern> patterns)
-        {
-            List<Piece> pieces = new List<Piece>();
-
-            foreach(Pattern pattern in patterns)
-            {
-                pieces.AddRange(pattern._piecesInPattern);
-            }
-
-            return pieces;
-        }
     }
 }

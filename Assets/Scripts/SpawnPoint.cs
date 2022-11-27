@@ -22,23 +22,5 @@ namespace Match3NonPhys
             _specialType = pieceSpecialType;
             _pieceType = pieceType;
         }
-        public SpawnPoint(Vector3 coordinates, int pieceSpecialType, PieceType pieceType)
-        {
-            _coords = coordinates;
-            _pieceType = pieceType;
-
-            switch (pieceSpecialType)
-            {
-                case 4:
-                    _specialType = PieceSpecialType.Bomb;
-                    break;
-                case 5:
-                    _specialType = PieceSpecialType.Lightning;
-                    break;
-                default:
-                    _specialType = PieceSpecialType.Regular;
-                    break;
-            }
-        }
     }
 }
