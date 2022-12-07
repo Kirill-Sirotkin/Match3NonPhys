@@ -8,19 +8,19 @@ namespace Match3NonPhys
     {
         public Vector3 _coords { get; private set; }
         public PieceSpecialType _specialType { get; private set; }
-        public PieceType _pieceType { get; private set; }
+        public PieceType _colorType { get; private set; }
 
         public SpawnPoint(Vector3 coordinates)
         {
             _coords = coordinates;
             _specialType = PieceSpecialType.Regular;
-            _pieceType = PieceType.Random;
+            _colorType = PieceType.Random;
         }
-        public SpawnPoint(Vector3 coordinates, PieceSpecialType pieceSpecialType, PieceType pieceType)
+        public SpawnPoint(Vector3 coordinates, PieceSpecialType pieceSpecialType, PieceType colorType)
         {
             _coords = coordinates;
             _specialType = pieceSpecialType;
-            _pieceType = pieceType;
+            _colorType = colorType;
         }
     }
 }
