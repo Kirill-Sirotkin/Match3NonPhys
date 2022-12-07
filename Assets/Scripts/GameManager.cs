@@ -12,6 +12,7 @@ namespace Match3NonPhys
     public class GameManager : StateManager
     {
         [field: SerializeField] public Transform _piecesParent { get; private set; }
+        [field: SerializeField] public PiecePrefabsManager _prefabsManager { get; private set; }
         [field: SerializeField] public TMP_Text _scoreNumUI { get; private set; }
         private int _scoreNum = 0;
 
@@ -21,28 +22,8 @@ namespace Match3NonPhys
         public Piece _selectedPiece { get; private set; } = null;
         public Piece[] _swappedPieces { get; private set; } = new Piece[2];
 
-        [Header ("Regular Pieces")]
-        [field: SerializeField] private GameObject _redPiece;
-        [field: SerializeField] private GameObject _bluePiece;
-        [field: SerializeField] private GameObject _yellowPiece;
-        [field: SerializeField] private GameObject _purplePiece;
-        [field: SerializeField] private GameObject _greenPiece;
-        [Header("Bomb Pieces")]
-        [field: SerializeField] private GameObject _redBombPiece;
-        [field: SerializeField] private GameObject _blueBombPiece;
-        [field: SerializeField] private GameObject _yellowBombPiece;
-        [field: SerializeField] private GameObject _purpleBombPiece;
-        [field: SerializeField] private GameObject _greenBombPiece;
-        [Header("Lightning Pieces")]
-        [field: SerializeField] private GameObject _redLightningPiece;
-        [field: SerializeField] private GameObject _blueLightningPiece;
-        [field: SerializeField] private GameObject _yellowLightningPiece;
-        [field: SerializeField] private GameObject _purpleLightningPiece;
-        [field: SerializeField] private GameObject _greenLightningPiece;
         [Header("Seed")]
         [field: SerializeField] private string _spawnerSeed;
-        public GameObject[] _pieces { get; private set; }
-        public GameObject[,] _specialPieces { get; private set; }
         public bool _takeInput { get; set; }
         public Piece[] _lastSwappedPieces { get; set; } = new Piece[2];
         public List<Pattern> _patterns { get; set; } = new List<Pattern>();
@@ -51,11 +32,6 @@ namespace Match3NonPhys
 
         private void Start()
         {
-            _pieces = new GameObject[] { _redPiece, _bluePiece, _yellowPiece, _purplePiece, _greenPiece };
-            _specialPieces = new GameObject[,] { 
-                { _redBombPiece, _blueBombPiece, _yellowBombPiece, _purpleBombPiece, _greenBombPiece }, 
-                { _redLightningPiece, _blueLightningPiece, _yellowLightningPiece, _purpleLightningPiece, _greenLightningPiece } 
-            };
             SetState(new BeginState(this, _spawnerSeed));
         }
         private void Update()

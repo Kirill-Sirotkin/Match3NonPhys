@@ -830,6 +830,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <_piecesParent>k__BackingField: {fileID: 678683515}
+  <_prefabsManager>k__BackingField: {fileID: 672840601}
   <_scoreNumUI>k__BackingField: {fileID: 520250041}
   _redPiece: {fileID: 2901464556644184483, guid: 340fb3bb650774543abb69c2992792e1, type: 3}
   _bluePiece: {fileID: 5385432521648036387, guid: 4adf129a32d3493419cd269578e76b0b, type: 3}

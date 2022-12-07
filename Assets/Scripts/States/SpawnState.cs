@@ -75,77 +75,75 @@ namespace Match3NonPhys
         }
         private GameObject SpawnPiece(Vector3 pos, Transform parent)
         {
-            int index = Random.Range(0, gameManager._pieces.GetLength(0));
-            GameObject obj = Object.Instantiate(gameManager._pieces[index], pos, Quaternion.identity, parent);
+            GameObject obj = 
+                Object.Instantiate(gameManager._prefabsManager.GetPiecePrefab(PieceSpecialType.Regular), 
+                pos, Quaternion.identity, parent);
 
             return obj;
         }
         private GameObject SpawnPiece(Vector3 pos, Transform parent, char pieceType)
         {
-            int index;
+            PieceType colorType;
             switch (pieceType)
             {
                 case 'r':
-                    index = 0;
+                    colorType = PieceType.Red;
                     break;
                 case 'b':
-                    index = 1;
+                    colorType = PieceType.Blue;
                     break;
                 case 'y':
-                    index = 2;
+                    colorType = PieceType.Yellow;
                     break;
                 case 'p':
-                    index = 3;
+                    colorType = PieceType.Purple;
                     break;
                 case 'g':
-                    index = 4;
+                    colorType = PieceType.Green;
                     break;
                 default:
-                    index = 0;
+                    colorType = PieceType.Red;
                     Debug.Log("Unknown piece signature in seed. Spawning default piece");
                     break;
             }
 
-            GameObject obj = Object.Instantiate(gameManager._pieces[index], pos, Quaternion.identity, parent);
+            GameObject obj = 
+                Object.Instantiate(gameManager._prefabsManager.GetPiecePrefab(PieceSpecialType.Regular, colorType), 
+                pos, Quaternion.identity, parent);
             return obj;
         }
         private GameObject SpawnPiece(Vector3 pos, Transform parent, PieceType pieceType, int specialType)
         {
-            int pieceTypeIndex;
             switch (pieceType)
             {
                 case PieceType.Red:
-                    pieceTypeIndex = 0;
                     break;
                 case PieceType.Blue:
-                    pieceTypeIndex = 1;
                     break;
                 case PieceType.Yellow:
-                    pieceTypeIndex = 2;
                     break;
                 case PieceType.Purple:
-                    pieceTypeIndex = 3;
                     break;
                 case PieceType.Green:
-                    pieceTypeIndex = 4;
                     break;
                 default:
-                    pieceTypeIndex = 0;
                     Debug.Log("Unknown piece type. Spawning default piece");
                     break;
             }
 
-            int specialTypeIndex;
+            PieceSpecialType pieceSpecialType;
             if (specialType >= 5)
             {
-                specialTypeIndex = 1;
+                pieceSpecialType = PieceSpecialType.Lightning;
             }
             else
             {
-                specialTypeIndex = 0;
+                pieceSpecialType = PieceSpecialType.Bomb;
             }
 
-            GameObject obj = Object.Instantiate(gameManager._specialPieces[specialTypeIndex, pieceTypeIndex], pos, Quaternion.identity, parent);
+            GameObject obj = 
+                Object.Instantiate(gameManager._prefabsManager.GetPiecePrefab(pieceSpecialType, pieceType), 
+                pos, Quaternion.identity, parent);
             return obj;
         }
         private Sequence MovePiecesDown()
