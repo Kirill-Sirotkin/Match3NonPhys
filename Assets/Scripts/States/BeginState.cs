@@ -13,30 +13,78 @@ namespace Match3NonPhys
 
         public override void StartAction()
         {
-            List<Vector3> spawnPoints = new List<Vector3>();
+            List<SpawnPoint> spawnPoints;
 
-            for (int i = 0; i < 5; i++)
-            {
-                for (int j = -3; j <= 3; j++)
-                {
-                    Vector3 spawn = new Vector3(j, i, 0f);
-                    spawnPoints.Add(spawn);
-                }
-            }
+            if (IsSeedCorrect(_seed)) 
+            { spawnPoints = GenerateInitialSpawnPoints(_seed); }
+            else 
+            { spawnPoints = GenerateInitialSpawnPoints(); }
 
-            if (!IsSeedCorrect()) { gameManager.SetState(new SpawnState(gameManager, spawnPoints)); return; }
-            gameManager.SetState(new SpawnState(gameManager, spawnPoints, null, _seed));
+            gameManager.SetState(new SpawnState(gameManager, spawnPoints));
         }
 
         #region Own methods
 
         private string _seed;
 
-        private bool IsSeedCorrect()
+        private bool IsSeedCorrect(string seed)
         {
-            if (_seed == null) { return false; }
-            if (_seed.Length != 35) { return false; }
+            if (seed == null) { return false; }
+            if (seed.Length != 35) { return false; }
             return true;
+        }
+        private List<SpawnPoint> GenerateInitialSpawnPoints()
+        {
+            List<SpawnPoint> spawnPoints = new List<SpawnPoint>();
+
+            for (int i = 0; i < 5; i++)
+            {
+                for (int j = -3; j <= 3; j++)
+                {
+                    Vector3 spawnCoords = new Vector3(j, i, 0f);
+                    spawnPoints.Add(new SpawnPoint(spawnCoords));
+                }
+            }
+
+            return spawnPoints;
+        }
+        private List<SpawnPoint> GenerateInitialSpawnPoints(string seed)
+        {
+            List<SpawnPoint> spawnPoints = new List<SpawnPoint>();
+            int seedPieceIndex = 0;
+
+            for (int i = 0; i < 5; i++)
+            {
+                for (int j = -3; j <= 3; j++)
+                {
+                    Vector3 spawnCoords = new Vector3(j, i, 0f);
+                    PieceType colorType = ParseSeedPiece(seed[seedPieceIndex]);
+
+                    seedPieceIndex++;
+                    spawnPoints.Add(new SpawnPoint(spawnCoords, PieceSpecialType.Regular, colorType));
+                }
+            }
+
+            return spawnPoints;
+        }
+        private PieceType ParseSeedPiece(char seedPiece)
+        {
+            switch (seedPiece)
+            {
+                case 'r':
+                    return PieceType.Red;
+                case 'b':
+                    return PieceType.Blue;
+                case 'y':
+                    return PieceType.Yellow;
+                case 'p':
+                    return PieceType.Purple;
+                case 'g':
+                    return PieceType.Green;
+                default:
+                    Debug.Log("Unknown seed piece signature. Spawning default Red piece");
+                    return PieceType.Red;
+            }
         }
 
         #endregion

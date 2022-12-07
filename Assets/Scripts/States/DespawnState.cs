@@ -15,53 +15,61 @@ namespace Match3NonPhys
         public override void StartAction()
         {
             Sequence seq = DOTween.Sequence();
+
+            Sequence specialSeq = DOTween.Sequence();
+            Sequence regularSeq = DOTween.Sequence();
+
+
             List<Vector3> spawnPoints = new List<Vector3>();
             Dictionary<Piece, int> specialPiecesSpawnPoints = new Dictionary<Piece, int>();
             List<Piece> piecesToDespawn = new List<Piece>();
 
+            List<SpawnPoint> spawnPoints1 = new List<SpawnPoint>();
+            List<Piece> allPieces = new List<Piece>();
+
             foreach(Pattern pat in _patterns)
             {
                 List<Piece> patternPieces = new List<Piece>(pat._piecesInPattern);
+                allPieces.AddRange(patternPieces);
 
                 if (patternPieces.Count > 3)
                 {
+                    PieceSpecialType specialType;
+                    if (patternPieces.Count >= 5)
+                    {
+                        specialType = PieceSpecialType.Lightning;
+                    }
+                    else
+                    {
+                        specialType = PieceSpecialType.Bomb;
+                    }
                     Piece specialPiece = GetSpecialPiecePosition(patternPieces);
                     specialPiecesSpawnPoints.Add(specialPiece, patternPieces.Count);
+
+                    spawnPoints1.Add(new SpawnPoint(specialPiece.transform.position, specialType, specialPiece._type));
                     patternPieces.Remove(specialPiece);
                 }
 
-                piecesToDespawn.AddRange(patternPieces);
-            }
-
-            List<Piece> fullPieceList = new List<Piece>();
-            fullPieceList.AddRange(specialPiecesSpawnPoints.Keys);
-            fullPieceList.AddRange(piecesToDespawn);
-
-            int startIndex = fullPieceList.Count;
-
-            fullPieceList = GetPiecesFromSpecialMove(fullPieceList, 0, 0);
-
-            for (int i = startIndex; i < fullPieceList.Count; i++)
-            {
-                piecesToDespawn.Add(fullPieceList[i]);
-            }
-
-            Sequence specialSeq = DOTween.Sequence();
-            Sequence regularSeq = DOTween.Sequence();
-            foreach (Piece p in fullPieceList)
-            {
-                ISpecialPiece special = p.GetComponent<ISpecialPiece>();
-                if (special != null)
+                foreach (Piece piece in patternPieces)
                 {
-                    specialSeq.Join(special.SpecialMoveAnimation());
+                    spawnPoints1.Add(new SpawnPoint(new Vector3(piece.transform.position.x, piece.transform.position.y + 5, piece.transform.position.z)));
                 }
-
-                regularSeq.Join(p.Despawn());
             }
 
-            foreach (Piece p in piecesToDespawn)
+            int startIndex = allPieces.Count;
+            allPieces = GetPiecesFromSpecialMove(allPieces, 0, 0);
+
+            for (int i = startIndex; i < allPieces.Count; i++)
             {
-                spawnPoints.Add(new Vector3(p.transform.position.x, p.transform.position.y + 5f, p.transform.position.z));
+                spawnPoints1.Add(new SpawnPoint(new Vector3(allPieces[i].transform.position.x, allPieces[i].transform.position.y + 5, allPieces[i].transform.position.z)));
+            }
+
+            foreach(Piece piece in allPieces)
+            {
+                ISpecialPiece specialPieceInteface = piece.GetComponent<ISpecialPiece>();
+                if (specialPieceInteface != null) { specialSeq.Join(specialPieceInteface.SpecialMoveAnimation()); }
+
+                regularSeq.Join(piece.Despawn());
             }
 
             seq.Append(specialSeq);
@@ -70,7 +78,7 @@ namespace Match3NonPhys
             seq.OnComplete(() => 
             {
                 UpdateScore(spawnPoints.Count, specialPiecesSpawnPoints.Count);
-                gameManager.SetState(new SpawnState(gameManager, spawnPoints, specialPiecesSpawnPoints)); 
+                gameManager.SetState(new SpawnState(gameManager, spawnPoints1)); 
             });
         }
 

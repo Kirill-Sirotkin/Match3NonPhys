@@ -17,27 +17,6 @@ namespace Match3NonPhys
             if (lightningPieces.GetLength(0) != 5) { Debug.Log("Lightning pieces array wrong dimensions!"); }
         }
 
-        public GameObject GetPiecePrefab(PieceSpecialType specialType)
-        {
-            int pieceColorIndex;
-            pieceColorIndex = Random.Range(0, 5);
-
-            switch (pieceColorIndex)
-            {
-                case 0:
-                    return GetPiecePrefab(specialType, PieceType.Red);
-                case 1:
-                    return GetPiecePrefab(specialType, PieceType.Blue);
-                case 2:
-                    return GetPiecePrefab(specialType, PieceType.Yellow);
-                case 3:
-                    return GetPiecePrefab(specialType, PieceType.Purple);
-                case 4:
-                    return GetPiecePrefab(specialType, PieceType.Green);
-                default:
-                    return GetPiecePrefab(specialType, PieceType.Red);
-            }
-        }
         public GameObject GetPiecePrefab(PieceSpecialType specialType, PieceType colorType)
         {
             int pieceColorIndex;
@@ -58,6 +37,9 @@ namespace Match3NonPhys
                     break;
                 case PieceType.Green:
                     pieceColorIndex = 4;
+                    break;
+                case PieceType.Random:
+                    pieceColorIndex = Random.Range(0, 5);
                     break;
                 default:
                     pieceColorIndex = 0;

@@ -7,44 +7,25 @@ namespace Match3NonPhys
 {
     public class SpawnState : State
     {
-        public SpawnState(GameManager manager, List<Vector3> spawnPoints, Dictionary<Piece, int> specialSpawns = null, string seed = null) : base(manager)
+        public SpawnState(GameManager manager, List<SpawnPoint> spawnPoints) : base(manager)
         {
-            _spawnPoints = new List<Vector3>(spawnPoints);
-            _specialPieceSpawnPoints = specialSpawns;
-            _seed = seed;
+            _spawnPoints = spawnPoints;
         }
 
         public override void StartAction()
         {
-            if (_seed == null)
+            foreach(SpawnPoint spawnPoint in _spawnPoints)
             {
-                foreach (Vector3 v in _spawnPoints)
-                {
-                    SpawnPiece(v, gameManager._piecesParent);
-                }
-                if (_specialPieceSpawnPoints != null)
-                {
-                    foreach (KeyValuePair<Piece, int> pair in _specialPieceSpawnPoints)
-                    {
-                        GameObject g = SpawnPiece(pair.Key.transform.position, gameManager._piecesParent, pair.Key._type, pair.Value);
-                        ISpecialPiece specialPiece = g.GetComponent<ISpecialPiece>();
+                GameObject g = SpawnPiece(spawnPoint._coords, spawnPoint._colorType, spawnPoint._specialType, gameManager._piecesParent);
+                ISpecialPiece specialPiece = g.GetComponent<ISpecialPiece>();
 
-                        if (specialPiece == null)
-                        {
-                            Debug.Log("Special Piece has no interface");
-                            continue;
-                        }
-
-                        specialPiece.SetGameManager(gameManager);
-                    }
-                }
-            }
-            else
-            {
-                for (int i = 0; i < _spawnPoints.Count; i++)
+                if (specialPiece == null)
                 {
-                    SpawnPiece(_spawnPoints[i], gameManager._piecesParent, _seed[i]);
+                    Debug.Log("Special Piece has no interface");
+                    continue;
                 }
+
+                specialPiece.SetGameManager(gameManager);
             }
 
             Sequence seq = MovePiecesDown();
@@ -61,7 +42,7 @@ namespace Match3NonPhys
 
         #region Own methods
 
-        private List<Vector3> _spawnPoints;
+        private List<SpawnPoint> _spawnPoints;
         private Dictionary<Piece, int> _specialPieceSpawnPoints;
         private string _seed;
 
@@ -73,77 +54,12 @@ namespace Match3NonPhys
                 Object.Destroy(child.gameObject);
             }
         }
-        private GameObject SpawnPiece(Vector3 pos, Transform parent)
+        private GameObject SpawnPiece(Vector3 pos, PieceType colorType, PieceSpecialType specialType, Transform parent)
         {
             GameObject obj = 
-                Object.Instantiate(gameManager._prefabsManager.GetPiecePrefab(PieceSpecialType.Regular), 
+                Object.Instantiate(gameManager._prefabsManager.GetPiecePrefab(specialType, colorType), 
                 pos, Quaternion.identity, parent);
 
-            return obj;
-        }
-        private GameObject SpawnPiece(Vector3 pos, Transform parent, char pieceType)
-        {
-            PieceType colorType;
-            switch (pieceType)
-            {
-                case 'r':
-                    colorType = PieceType.Red;
-                    break;
-                case 'b':
-                    colorType = PieceType.Blue;
-                    break;
-                case 'y':
-                    colorType = PieceType.Yellow;
-                    break;
-                case 'p':
-                    colorType = PieceType.Purple;
-                    break;
-                case 'g':
-                    colorType = PieceType.Green;
-                    break;
-                default:
-                    colorType = PieceType.Red;
-                    Debug.Log("Unknown piece signature in seed. Spawning default piece");
-                    break;
-            }
-
-            GameObject obj = 
-                Object.Instantiate(gameManager._prefabsManager.GetPiecePrefab(PieceSpecialType.Regular, colorType), 
-                pos, Quaternion.identity, parent);
-            return obj;
-        }
-        private GameObject SpawnPiece(Vector3 pos, Transform parent, PieceType pieceType, int specialType)
-        {
-            switch (pieceType)
-            {
-                case PieceType.Red:
-                    break;
-                case PieceType.Blue:
-                    break;
-                case PieceType.Yellow:
-                    break;
-                case PieceType.Purple:
-                    break;
-                case PieceType.Green:
-                    break;
-                default:
-                    Debug.Log("Unknown piece type. Spawning default piece");
-                    break;
-            }
-
-            PieceSpecialType pieceSpecialType;
-            if (specialType >= 5)
-            {
-                pieceSpecialType = PieceSpecialType.Lightning;
-            }
-            else
-            {
-                pieceSpecialType = PieceSpecialType.Bomb;
-            }
-
-            GameObject obj = 
-                Object.Instantiate(gameManager._prefabsManager.GetPiecePrefab(pieceSpecialType, pieceType), 
-                pos, Quaternion.identity, parent);
             return obj;
         }
         private Sequence MovePiecesDown()
