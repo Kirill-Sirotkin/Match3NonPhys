@@ -95,14 +95,7 @@ namespace Match3NonPhys
             }
 
             List<Piece> regularPieces = Pattern.GetPiecesFromPatterns(patterns);
-            foreach(Piece piece in regularPieces)
-            {
-                spawnPoints.Add(new SpawnPoint(new Vector3(
-                    piece.transform.position.x,
-                    piece.transform.position.y + 5,
-                    piece.transform.position.z
-                    )));
-            }
+            spawnPoints.AddRange(GetSpawnPoints(regularPieces));
 
             return spawnPoints;
         }
