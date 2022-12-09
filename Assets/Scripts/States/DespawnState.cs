@@ -19,77 +19,92 @@ namespace Match3NonPhys
             Sequence specialSeq = DOTween.Sequence();
             Sequence regularSeq = DOTween.Sequence();
 
+            List<SpawnPoint> spawnPoints = new List<SpawnPoint>();
+            List<Piece> allPieces = Pattern.GetPiecesFromPatterns(_patterns);
 
-            List<Vector3> spawnPoints = new List<Vector3>();
-            Dictionary<Piece, int> specialPiecesSpawnPoints = new Dictionary<Piece, int>();
-            List<Piece> piecesToDespawn = new List<Piece>();
+            spawnPoints.AddRange(GetSpawnPointsFromInitialPatterns(_patterns));
 
-            List<SpawnPoint> spawnPoints1 = new List<SpawnPoint>();
-            List<Piece> allPieces = new List<Piece>();
+            int initialAllPiecesCount = allPieces.Count;
+            allPieces = GetPiecesFromSpecialMove(allPieces);
 
-            foreach(Pattern pat in _patterns)
-            {
-                List<Piece> patternPieces = new List<Piece>(pat._piecesInPattern);
-                allPieces.AddRange(patternPieces);
+            AssignAnimations(allPieces, regularSeq, specialSeq);
 
-                if (patternPieces.Count > 3)
-                {
-                    PieceSpecialType specialType;
-                    if (patternPieces.Count >= 5)
-                    {
-                        specialType = PieceSpecialType.Lightning;
-                    }
-                    else
-                    {
-                        specialType = PieceSpecialType.Bomb;
-                    }
-                    Piece specialPiece = GetSpecialPiecePosition(patternPieces);
-                    specialPiecesSpawnPoints.Add(specialPiece, patternPieces.Count);
-
-                    spawnPoints1.Add(new SpawnPoint(specialPiece.transform.position, specialType, specialPiece._type));
-                    patternPieces.Remove(specialPiece);
-                }
-
-                foreach (Piece piece in patternPieces)
-                {
-                    spawnPoints1.Add(new SpawnPoint(new Vector3(piece.transform.position.x, piece.transform.position.y + 5, piece.transform.position.z)));
-                }
-            }
-
-            int startIndex = allPieces.Count;
-            allPieces = GetPiecesFromSpecialMove(allPieces, 0, 0);
-
-            for (int i = startIndex; i < allPieces.Count; i++)
-            {
-                spawnPoints1.Add(new SpawnPoint(new Vector3(allPieces[i].transform.position.x, allPieces[i].transform.position.y + 5, allPieces[i].transform.position.z)));
-            }
-
-            foreach(Piece piece in allPieces)
-            {
-                ISpecialPiece specialPieceInteface = piece.GetComponent<ISpecialPiece>();
-                if (specialPieceInteface != null) { specialSeq.Join(specialPieceInteface.SpecialMoveAnimation()); }
-
-                regularSeq.Join(piece.Despawn());
-            }
+            allPieces.RemoveRange(0, initialAllPiecesCount);
+            spawnPoints.AddRange(GetSpawnPoints(allPieces));
 
             seq.Append(specialSeq);
             seq.Append(regularSeq);
 
-            seq.OnComplete(() => 
-            {
-                UpdateScore(spawnPoints.Count, specialPiecesSpawnPoints.Count);
-                gameManager.SetState(new SpawnState(gameManager, spawnPoints1)); 
-            });
+            seq.OnComplete(() => { gameManager.SetState(new SpawnState(gameManager, spawnPoints)); });
         }
 
         #region Own methods
 
         List<Pattern> _patterns;
 
-        private void UpdateScore(int regulars, int specials)
+        private void AssignAnimations(List<Piece> pieces, Sequence regularSeq, Sequence specialSeq)
         {
-            int score = regulars * 50 + specials * 75;
-            gameManager.AddScore(score);
+            foreach(Piece piece in pieces)
+            {
+                ISpecialPiece specialInterface = piece.GetComponent<ISpecialPiece>();
+
+                if (specialInterface != null)
+                {
+                    specialSeq.Join(specialInterface.SpecialMoveAnimation());
+                }
+
+                regularSeq.Join(piece.Despawn());
+            }
+        }
+        private List<SpawnPoint> GetSpawnPoints(List<Piece> pieces)
+        {
+            List<SpawnPoint> spawnPoints = new List<SpawnPoint>();
+
+            foreach(Piece piece in pieces)
+            {
+                spawnPoints.Add(new SpawnPoint(new Vector3(
+                    piece.transform.position.x,
+                    piece.transform.position.y + 5,
+                    piece.transform.position.z
+                    )));
+            }
+
+            return spawnPoints;
+        }
+        private List<SpawnPoint> GetSpawnPointsFromInitialPatterns(List<Pattern> patterns)
+        {
+            List<SpawnPoint> spawnPoints = new List<SpawnPoint>();
+
+            foreach(Pattern pattern in patterns)
+            {
+                Piece specialPieceSpawn = GetSpecialPieceSpawn(pattern._piecesInPattern);
+
+                switch (pattern._piecesInPattern.Count)
+                {
+                    case 4:
+                        spawnPoints.Add(new SpawnPoint(specialPieceSpawn.transform.position, PieceSpecialType.Bomb, specialPieceSpawn._type));
+                        pattern._piecesInPattern.Remove(specialPieceSpawn);
+                        break;
+                    case 5:
+                        spawnPoints.Add(new SpawnPoint(specialPieceSpawn.transform.position, PieceSpecialType.Lightning, specialPieceSpawn._type));
+                        pattern._piecesInPattern.Remove(specialPieceSpawn);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            List<Piece> regularPieces = Pattern.GetPiecesFromPatterns(patterns);
+            foreach(Piece piece in regularPieces)
+            {
+                spawnPoints.Add(new SpawnPoint(new Vector3(
+                    piece.transform.position.x,
+                    piece.transform.position.y + 5,
+                    piece.transform.position.z
+                    )));
+            }
+
+            return spawnPoints;
         }
         private Piece SwappedPieceInPattern(List<Piece> pieces)
         {
@@ -115,7 +130,7 @@ namespace Match3NonPhys
 
             return null;
         }
-        private Piece GetSpecialPiecePosition(List<Piece> pieces)
+        private Piece GetSpecialPieceSpawn(List<Piece> pieces)
         {
             Piece swappedPiece = SwappedPieceInPattern(pieces);
 
@@ -142,7 +157,7 @@ namespace Match3NonPhys
         // If some pieces were added, then we need to check if any of them are special, hence the recursion.
         // The new start index is the end of the parameter list. Then new pieces are added to the parameter list.
         // This way, upon the new recurion call, it will start checking from the new pieces, avoiding infinite calls.
-        private List<Piece> GetPiecesFromSpecialMove(List<Piece> initialPieces, int startIndex, int recursionLimit)
+        private List<Piece> GetPiecesFromSpecialMove(List<Piece> initialPieces, int startIndex = 0, int recursionLimit = 0)
         {
             if (recursionLimit > 100)
             {
