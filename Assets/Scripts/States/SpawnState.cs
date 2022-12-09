@@ -19,23 +19,12 @@ namespace Match3NonPhys
                 GameObject g = SpawnPiece(spawnPoint._coords, spawnPoint._colorType, spawnPoint._specialType, gameManager._piecesParent);
                 ISpecialPiece specialPiece = g.GetComponent<ISpecialPiece>();
 
-                if (specialPiece == null)
-                {
-                    Debug.Log("Special Piece has no interface");
-                    continue;
-                }
-
+                if (specialPiece == null) { continue; }
                 specialPiece.SetGameManager(gameManager);
             }
 
             Sequence seq = MovePiecesDown();
-
-            if (gameManager._lastSwappedPieces != null)
-            {
-                gameManager._lastSwappedPieces[0] = null;
-                gameManager._lastSwappedPieces[1] = null;
-            }
-            gameManager._patterns.Clear();
+            ClearLastSwappedPieces();
 
             seq.OnComplete(() => { CleanUp(); gameManager.SetState(new PatternState(gameManager)); });
         }
@@ -43,8 +32,6 @@ namespace Match3NonPhys
         #region Own methods
 
         private List<SpawnPoint> _spawnPoints;
-        private Dictionary<Piece, int> _specialPieceSpawnPoints;
-        private string _seed;
 
         private void CleanUp()
         {
@@ -83,6 +70,15 @@ namespace Match3NonPhys
             }
 
             return seq;
+        }
+        private void ClearLastSwappedPieces()
+        {
+            if (gameManager._lastSwappedPieces != null)
+            {
+                gameManager._lastSwappedPieces[0] = null;
+                gameManager._lastSwappedPieces[1] = null;
+            }
+            gameManager._patterns.Clear();
         }
 
         #endregion

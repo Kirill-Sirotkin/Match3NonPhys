@@ -26,6 +26,17 @@ namespace Match3NonPhys
         }
         #endregion
 
+        public static List<Piece> GetPiecesFromPatterns(List<Pattern> patterns)
+        {
+            List<Piece> pieces = new List<Piece>();
+
+            foreach(Pattern pattern in patterns)
+            {
+                pieces.AddRange(pattern._piecesInPattern);
+            }
+
+            return pieces;
+        }
         public static List<Pattern> MergePatternsList(List<Pattern> patterns, int backupIterationCount)
         {
             bool isOverlapAnywhere = false;
