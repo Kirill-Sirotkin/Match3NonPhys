@@ -18,10 +18,10 @@ namespace Match3NonPhys
             foreach (Piece p in gameManager._piecesParent.GetComponentsInChildren<Piece>())
             {
                 ISpecialPiece special = p.GetComponent<ISpecialPiece>();
-                if (CheckForAvailableMoves(p.transform.position, _pattern1) ||
-                    CheckForAvailableMoves(p.transform.position, _pattern2) ||
-                    CheckForAvailableMoves(p.transform.position, _pattern3) ||
-                    CheckForAvailableMoves(p.transform.position, _pattern4) ||
+                if (CheckForAvailableMoves(p.transform.position, _elbowPattern) ||
+                    CheckForAvailableMoves(p.transform.position, _snowmanPattern) ||
+                    CheckForAvailableMoves(p.transform.position, _cornerPattern) ||
+                    CheckForAvailableMoves(p.transform.position, _cornerMirroredPattern) ||
                     special != null)
                 {
                     movesExist = true;
@@ -36,34 +36,62 @@ namespace Match3NonPhys
 
         #region Own methods
 
-        private List<Vector3> _pattern1 = new List<Vector3> { new Vector3(1f, 1f, 0f), new Vector3(2f, 0f, 0f) };
-        private List<Vector3> _pattern2 = new List<Vector3> { new Vector3(1f, 0f, 0f), new Vector3(3f, 0f, 0f) };
-        private List<Vector3> _pattern3 = new List<Vector3> { new Vector3(1f, 0f, 0f), new Vector3(2f, 1f, 0f) };
-        private List<Vector3> _pattern4 = new List<Vector3> { new Vector3(1f, 0f, 0f), new Vector3(2f, -1f, 0f) };
+        private List<Vector3> _elbowPattern = new List<Vector3> { new Vector3(1f, 1f, 0f), new Vector3(2f, 0f, 0f) };
+        private List<Vector3> _snowmanPattern = new List<Vector3> { new Vector3(1f, 0f, 0f), new Vector3(3f, 0f, 0f) };
+        private List<Vector3> _cornerPattern = new List<Vector3> { new Vector3(1f, 0f, 0f), new Vector3(2f, 1f, 0f) };
+        private List<Vector3> _cornerMirroredPattern = new List<Vector3> { new Vector3(1f, 0f, 0f), new Vector3(2f, -1f, 0f) };
 
         private bool CheckForAvailableMoves(Vector3 pos, List<Vector3> pattern)
         {
-            List<Vector3> rotatingPattern = new List<Vector3>(pattern);
             Vector3 rayStart = new Vector3(0f, 0f, -1.5f);
             PieceType pieceType = gameManager.GetRayPiece(pos + rayStart, Vector3.forward)._type;
 
+            List<Vector3> checkedPattern = new List<Vector3>(pattern);
+
             for (int i = 0; i < 4; i++)
             {
-                Piece checkPiece1 = gameManager.GetRayPiece(pos + rotatingPattern[0] + rayStart, Vector3.forward);
-                Piece checkPiece2 = gameManager.GetRayPiece(pos + rotatingPattern[1] + rayStart, Vector3.forward);
-                if (checkPiece1 != null && checkPiece2 != null &&
-                    checkPiece1._type == pieceType && checkPiece2._type == pieceType)
+                bool isPatternTypeMatch = true;
+
+                foreach(Vector3 vector in checkedPattern)
                 {
-                    return true;
+                    if (!isPatternTypeMatch) { continue; }
+
+                    Piece checkedPiece = gameManager.GetRayPiece(pos + rayStart + vector, Vector3.forward);
+                    if (checkedPiece == null) { isPatternTypeMatch = false; continue; }
+
+                    PieceType checkedPieceType = checkedPiece._type;
+                    if (checkedPieceType != pieceType) { isPatternTypeMatch = false; }
                 }
 
-                rotatingPattern[0] = new Vector3(rotatingPattern[0].y, -1 * rotatingPattern[0].x);
-                rotatingPattern[1] = new Vector3(rotatingPattern[1].y, -1 * rotatingPattern[1].x);
+                if (isPatternTypeMatch) { return true; }
+
+                checkedPattern = RotatePattern(checkedPattern);
             }
 
             return false;
         }
+        private List<Vector3> RotatePattern(List<Vector3> pattern)
+        {
+            List<Vector3> rotatedPattern = new List<Vector3>();
 
+            foreach(Vector3 vector in pattern)
+            {
+                rotatedPattern.Add(new Vector3(vector.y, vector.x * -1, vector.z));
+            }
+
+            return rotatedPattern;
+        }
+        private List<Vector3> MirrorPattern(List<Vector3> pattern)
+        {
+            List<Vector3> mirroredPattern = new List<Vector3>();
+
+            foreach (Vector3 vector in pattern)
+            {
+                mirroredPattern.Add(new Vector3(vector.x, vector.y * -1, vector.z));
+            }
+
+            return mirroredPattern;
+        }
         private Sequence Shuffle()
         {
             Sequence seq = DOTween.Sequence();
