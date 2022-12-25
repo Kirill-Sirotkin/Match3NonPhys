@@ -28,6 +28,7 @@ namespace Match3NonPhys
             allPieces = GetPiecesFromSpecialMove(allPieces);
 
             AssignAnimations(allPieces, regularSeq, specialSeq);
+            UpdateScores(allPieces);
 
             allPieces.RemoveRange(0, initialAllPiecesCount);
             spawnPoints.AddRange(GetSpawnPoints(allPieces));
@@ -42,6 +43,22 @@ namespace Match3NonPhys
 
         List<Pattern> _patterns;
 
+        private void UpdateScores(List<Piece> pieces)
+        {
+            int score = 0;
+
+            foreach(Piece piece in pieces)
+            {
+                if (piece.GetComponent<ISpecialPiece>() != null)
+                {
+                    score += 50;
+                }
+
+                score += 50;
+            }
+
+            gameManager.AddScore(score);
+        }
         private void AssignAnimations(List<Piece> pieces, Sequence regularSeq, Sequence specialSeq)
         {
             foreach(Piece piece in pieces)
