@@ -13,6 +13,7 @@ namespace Match3NonPhys
     {
         [field: SerializeField] public Transform _piecesParent { get; private set; }
         [field: SerializeField] public PiecePrefabsManager _prefabsManager { get; private set; }
+        [field: SerializeField] public SoundManager _soundManager { get; private set; }
         [field: SerializeField] public TMP_Text _scoreNumUI { get; private set; }
         private int _scoreNum = 0;
 
@@ -33,6 +34,7 @@ namespace Match3NonPhys
         private void Start()
         {
             SetState(new BeginState(this, _spawnerSeed));
+            _soundManager.PlaySound("MusicTheme");
         }
         private void Update()
         {
@@ -62,6 +64,8 @@ namespace Match3NonPhys
 
             piece1.ToggleHighlight(false);
             piece2.ToggleHighlight(false);
+
+            _soundManager.PlaySound("PiecesMoved");
 
             return seq;
         }

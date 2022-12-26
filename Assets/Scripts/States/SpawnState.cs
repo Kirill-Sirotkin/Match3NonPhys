@@ -69,6 +69,8 @@ namespace Match3NonPhys
                 }
             }
 
+            gameManager._soundManager.PlaySound("PiecesSlideDown");
+
             return seq;
         }
         private void ClearLastSwappedPieces()

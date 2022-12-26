@@ -36,7 +36,11 @@ namespace Match3NonPhys
             seq.Append(specialSeq);
             seq.Append(regularSeq);
 
-            seq.OnComplete(() => { gameManager.SetState(new SpawnState(gameManager, spawnPoints)); });
+            seq.OnComplete(() => 
+            {
+                gameManager._soundManager.PlaySound("PiecesDespawned");
+                gameManager.SetState(new SpawnState(gameManager, spawnPoints)); 
+            });
         }
 
         #region Own methods

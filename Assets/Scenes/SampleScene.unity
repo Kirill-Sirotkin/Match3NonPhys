@@ -453,7 +453,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &678683514
 GameObject:
@@ -484,7 +484,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &705507993
 GameObject:
@@ -831,22 +831,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <_piecesParent>k__BackingField: {fileID: 678683515}
   <_prefabsManager>k__BackingField: {fileID: 672840601}
+  <_soundManager>k__BackingField: {fileID: 1398561263}
   <_scoreNumUI>k__BackingField: {fileID: 520250041}
-  _redPiece: {fileID: 2901464556644184483, guid: 340fb3bb650774543abb69c2992792e1, type: 3}
-  _bluePiece: {fileID: 5385432521648036387, guid: 4adf129a32d3493419cd269578e76b0b, type: 3}
-  _yellowPiece: {fileID: 2178407730720813102, guid: 8eacd36256e23fe438a89fc3769d1b6d, type: 3}
-  _purplePiece: {fileID: 1488250429304100442, guid: 16dff4795b7863e47ae2aa347404f73a, type: 3}
-  _greenPiece: {fileID: 1106626270107597992, guid: 03e692ee52ebfd44481bcf934be38b73, type: 3}
-  _redBombPiece: {fileID: 2901464556644184483, guid: 3a9c0a21716c7f546aa6c297c91402c4, type: 3}
-  _blueBombPiece: {fileID: 5385432521648036387, guid: 339f042fa88b1d7499e9f6245e1eca6c, type: 3}
-  _yellowBombPiece: {fileID: 2178407730720813102, guid: a40f31032d5913e4e83bd0b1c1e3b0a7, type: 3}
-  _purpleBombPiece: {fileID: 1488250429304100442, guid: dfff4102730915341b0f03ab1e170097, type: 3}
-  _greenBombPiece: {fileID: 1106626270107597992, guid: ce5636640b7d67249a04c0a54045a459, type: 3}
-  _redLightningPiece: {fileID: 2901464556644184483, guid: ff0f7c246ffd892449d791bd924a387c, type: 3}
-  _blueLightningPiece: {fileID: 5385432521648036387, guid: 8b2b0074393e303428d21da97ce0f91b, type: 3}
-  _yellowLightningPiece: {fileID: 2178407730720813102, guid: 1af7062f0eac93b42b0d189356b10cd6, type: 3}
-  _purpleLightningPiece: {fileID: 1488250429304100442, guid: a091f283eca850a4ca1a2c23125e0c6c, type: 3}
-  _greenLightningPiece: {fileID: 1106626270107597992, guid: 1ac77d19cf023b543a4662cd074c2399, type: 3}
   _spawnerSeed: 
 --- !u!1 &1398250793
 GameObject:
@@ -914,7 +900,72 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1398561262
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1398561264}
+  - component: {fileID: 1398561263}
+  m_Layer: 0
+  m_Name: SOUND MANAGER
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1398561263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1398561262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d421c841df98a7b4a9f4a97d72ffce54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sounds:
+  - _name: PiecesDespawned
+    _clip: {fileID: 8300000, guid: 19797dedbd5edfb47a5d3ad757dbcf67, type: 3}
+    _volume: 1
+    _pitch: 1.5
+    _loop: 0
+  - _name: PiecesMoved
+    _clip: {fileID: 8300000, guid: 0bee699a03f0f3440987bf46e3de2e12, type: 3}
+    _volume: 0.295
+    _pitch: 1.5
+    _loop: 0
+  - _name: PiecesSlideDown
+    _clip: {fileID: 8300000, guid: d84ff4625a0cd2047862e10493a8a670, type: 3}
+    _volume: 0.295
+    _pitch: 1.5
+    _loop: 0
+  - _name: MusicTheme
+    _clip: {fileID: 8300000, guid: c61ceee40d18fc1489f59586977f478a, type: 3}
+    _volume: 0.15
+    _pitch: 1
+    _loop: 1
+--- !u!4 &1398561264
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1398561262}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2114258978
 GameObject:
@@ -1010,7 +1061,7 @@ RectTransform:
   m_Children:
   - {fileID: 1227779419}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
